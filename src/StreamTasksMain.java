@@ -20,7 +20,7 @@ public class StreamTasksMain {
     
     public static void main (String ... args) {
         try { 
-            runTasks (new StreamTasks ()); 
+            runTasks (new StreamTasksSolution ()); 
             System.out.println ("All tests completed!");
         } catch (UnsupportedOperationException uoe) {
             System.out.printf ("Method `%s` is not implemened%n", uoe.getMessage ());
@@ -105,6 +105,26 @@ public class StreamTasksMain {
         final var name2value = new HashMap <> (Map.of ("Andrey", 43, "Boris", 12, "David", -9, "Efim", 78, "Feofan", 93));
         assertOutput ("Task 22", imp.task22 (uniqueNames, name2value), false, Arrays.asList (43, 12, null, -9, 78, 93));
         assertOutput ("Task 23", imp.task23 (uniqueNames, name2value), 43 + 12 + -9 + 78 + 93);
+        
+        final var randomSequence = List.of (0, 2, 1, 4, 5, 3, 6, 6, 8, 5, 1, 0, 0);
+        assertOutput ("Task 24", imp.task24 (randomSequence.subList (0, 9), 3, 6), false, List.of (4, 5, 3, 6));
+        assertOutput ("Task 25", imp.task25 (randomSequence, 3, 6, 9, 20), false, List.of (4, 5, 3, 6, 5, 1, 0, 0));
+        
+        assertOutput ("Task 26", imp.task26 (uniqueNames.stream (), uniqueNames.get (4)) ? 1 : 0, 1);
+        assertOutput ("Task 26", imp.task26 (uniqueNames.stream (), "Xeon") ? 1 : 0, 0);
+        
+        assertOutput ("Task 27", imp.task27 (nonUniqueNamesWithNulls.stream (), uniqueNames.get (4)), 14);
+        assertOutput ("Task 27", imp.task27 (nonUniqueNamesWithNulls.stream (), "Xeon"), 0);
+        
+        assertOutput ("Task 28", imp.task28 (uniqueNames, List.of ("Barlow", "Sill", "Matheu", "Throk")), false, List.of (
+            "Andrey Barlow", "Boris Sill", "Clavdij Matheu", "David Throk"
+        ));
+        assertOutput ("Task 28", imp.task28 (uniqueNames, Arrays.asList ("Barlow", "Sill", null, "Throk")), false, List.of (
+            "Andrey Barlow", "Boris Sill", "Clavdij null", "David Throk"
+        ));
+        
+        assertOutput ("Task 29", imp.task29 (uniqueNames.stream ()), Set.copyOf (uniqueNames));
+        assertOutput ("Task 29", imp.task29 (nonUniqueNamesWithNulls.stream ()), nonUniqueNamesWithNulls);
     }
     
     @SuppressWarnings ("unused")

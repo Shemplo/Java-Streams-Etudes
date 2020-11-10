@@ -169,4 +169,46 @@ public class StreamTasks {
         throw new UnsupportedOperationException ("task23");
     }
     
+    /**
+     * @return Stream of numbers which positions in given list are in segment [from, to]
+     */
+    public Stream <Integer> task24 (List <Integer> numbers, int from, int to) {
+        throw new UnsupportedOperationException ("task24");
+    }
+    
+    /**
+     * @return Stream of numbers which positions in given list are in segments: [from1, to1], [from2, to2]
+     */
+    public Stream <Integer> task25 (List <Integer> numbers, int from1, int to1, int from2, int to2) {
+        throw new UnsupportedOperationException ("task25");
+    }
+    
+    /**
+     * @return Check whether stream of names contains given name
+     */
+    public boolean task26 (Stream <String> names, String name) {
+        throw new UnsupportedOperationException ("task26");
+    }
+    
+    /**
+     * @return Number of stream elements after first name equals to given
+     */
+    public int task27 (Stream <String> names, String name) {
+        throw new UnsupportedOperationException ("task27");
+    }
+    
+    /**
+     * @return Stream of names concatenated with corresponding last names with 1 space ([A, B], [C, D, E]) -> [A C, B D]
+     */
+    public Stream <String> task28 (List <String> names, List <String> lastNames) {
+        throw new UnsupportedOperationException ("task28");
+    }
+    
+    /**
+     * @return List of stream elements
+     */
+    public List <String> task29 (Stream <String> names) {
+        throw new UnsupportedOperationException ("task29");
+    }
+    
 }

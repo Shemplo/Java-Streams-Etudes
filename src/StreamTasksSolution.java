@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -122,6 +123,36 @@ public class StreamTasksSolution extends StreamTasks {
     @Override
     public int task23 (List <String> names, Map <String, Integer> name2value) {
         return names.stream ().filter (name2value::containsKey).mapToInt (name2value::get).sum ();
+    }
+    
+    @Override
+    public Stream <Integer> task24 (List <Integer> numbers, int from, int to) {
+        return IntStream.range (from, to + 1).mapToObj (numbers::get);
+    }
+    
+    @Override
+    public Stream <Integer> task25 (List <Integer> numbers, int from1, int to1, int from2, int to2) {
+        return IntStream.range (0, numbers.size ()).filter (i -> (i >= from1 && i <= to1) || (i >= from2 && i <= to2)).mapToObj (numbers::get);
+    }
+    
+    @Override
+    public boolean task26 (Stream <String> names, String name) {
+        return names.filter (name::equals).findFirst ().isPresent ();
+    }
+    
+    @Override
+    public int task27 (Stream <String> names, String name) {
+        return (int) Math.max (names.dropWhile (n -> !name.equals (n)).count () - 1, 0);
+    }
+    
+    @Override
+    public Stream <String> task28 (List <String> names, List <String> lastNames) {
+        return IntStream.range (0, Math.min (names.size (), lastNames.size ())).mapToObj (i -> String.format ("%s %s", names.get (i), lastNames.get (i)));
+    }
+    
+    @Override
+    public List <String> task29 (Stream <String> names) {
+        return names.collect (Collectors.toList ());
     }
     
 }

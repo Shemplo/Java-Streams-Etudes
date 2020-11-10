@@ -7,7 +7,7 @@ functional things.
 
 ### Running tests
 
-Due to this project is orientated for begginers **no dependent libraries** are required.
+Due to this project is orientated for beginners **no dependent libraries** are required.
 
 * You will need just a **JVM of 11 version (or higher)**.
 
