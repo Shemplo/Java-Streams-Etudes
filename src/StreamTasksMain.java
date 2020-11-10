@@ -20,7 +20,7 @@ public class StreamTasksMain {
     
     public static void main (String ... args) {
         try { 
-            runTasks (new StreamTasksSolution ()); 
+            runTasks (new StreamTasks ()); 
             System.out.println ("All tests completed!");
         } catch (UnsupportedOperationException uoe) {
             System.out.printf ("Method `%s` is not implemened%n", uoe.getMessage ());
