@@ -20,7 +20,11 @@ public class StreamTasksMain {
     
     public static void main (String ... args) {
         try { 
-            runTasks (new StreamTasks ()); 
+            if (args.length > 0 && "validate".equals (args [0])) {
+                runTasks (new StreamTasksSolution ());                 
+            } else {                
+                runTasks (new StreamTasks ()); 
+            }
             System.out.println ("All tests completed!");
         } catch (UnsupportedOperationException uoe) {
             System.out.printf ("Method `%s` is not implemened%n", uoe.getMessage ());
