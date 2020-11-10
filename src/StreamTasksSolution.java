@@ -1,4 +1,7 @@
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -18,7 +21,7 @@ public class StreamTasksSolution extends StreamTasks {
     
     @Override
     public int task3 (List <String> names) {
-        return List.copyOf (Set.copyOf (names)).size ();
+        return task2 (names).size ();
     }
     
     @Override
@@ -38,7 +41,7 @@ public class StreamTasksSolution extends StreamTasks {
     
     @Override
     public Stream <String> task7 (List <String> names) {
-        return names.stream ().filter (n -> n != null);
+        return names.stream ().filter (Objects::nonNull);
     }
     
     @Override
@@ -48,7 +51,7 @@ public class StreamTasksSolution extends StreamTasks {
     
     @Override
     public Stream <String> task9 (List <String> names) {
-        return names.stream ().filter (n -> n != null).map (n -> n + " Smith");
+        return names.stream ().filter (Objects::nonNull).map (n -> n + " Smith");
     }
     
     @Override
@@ -91,8 +94,34 @@ public class StreamTasksSolution extends StreamTasks {
         return IntStream.range (0, 9933);
     }
     
-    public Stream <String> task18 (List <String> names, int length) {
-        return names.stream ().limit (length);
+    @Override
+    public Stream <String> task18 (List <String> names, int streamLength) {
+        return names.stream ().limit (streamLength);
+    }
+    
+    @Override
+    public Stream <String> task19 (List <String> names, int nameLength) {
+        return names.stream ().filter (name -> name.length () == nameLength);
+    }
+    
+    @Override
+    public Stream <String> task20 (List <String> names, Comparator <String> comparator) {
+        return names.stream ().filter (Objects::nonNull).sorted (comparator);
+    }
+    
+    @Override
+    public Stream <String> task21 (List <String> a, List <String> b) {
+        return Stream.concat (a.stream (), b.stream ());
+    }
+    
+    @Override
+    public Stream <Integer> task22 (List <String> names, Map <String, Integer> name2value) {
+        return names.stream ().map (name2value::get);
+    }
+    
+    @Override
+    public int task23 (List <String> names, Map <String, Integer> name2value) {
+        return names.stream ().filter (name2value::containsKey).mapToInt (name2value::get).sum ();
     }
     
 }

@@ -1,4 +1,6 @@
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -128,8 +130,43 @@ public class StreamTasks {
     /**
      * @return Stream of names with given length (do not include other names)
      */
-    public Stream <String> task18 (List <String> names, int length) {
+    public Stream <String> task18 (List <String> names, int streamLength) {
         throw new UnsupportedOperationException ("task18");
+    }
+    
+    /**
+     * @return Stream of names with given length
+     */
+    public Stream <String> task19 (List <String> names, int nameLength) {
+        throw new UnsupportedOperationException ("task19");
+    }
+    
+    /**
+     * @return Stream of names sorted by given comparator (be careful, NULL can be in names)
+     */
+    public Stream <String> task20 (List <String> names, Comparator <String> comparator) {
+        throw new UnsupportedOperationException ("task19");
+    }
+    
+    /**
+     * @return Stream that contains all elements from 2 given lists
+     */
+    public Stream <String> task21 (List <String> a, List <String> b) {
+        throw new UnsupportedOperationException ("task21");
+    }
+    
+    /**
+     * @return Stream of numbers that a referred to names in given map
+     */
+    public Stream <Integer> task22 (List <String> names, Map <String, Integer> name2value) {
+        throw new UnsupportedOperationException ("task22");
+    }
+    
+    /**
+     * @return Sum of numbers that a referred to names in given map
+     */
+    public int task23 (List <String> names, Map <String, Integer> name2value) {
+        throw new UnsupportedOperationException ("task23");
     }
     
 }

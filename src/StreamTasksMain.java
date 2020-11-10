@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,15 +14,27 @@ import java.util.stream.Stream;
 
 public class StreamTasksMain {
     
+    /*******************************/
+    /* DO NOT TOUCH METHODS BELLOW */
+    /*******************************/
+    
     public static void main (String ... args) {
         try { 
             runTasks (new StreamTasks ()); 
-            System.out.println ("All tests completed!"); // SYSOUT
+            System.out.println ("All tests completed!");
         } catch (UnsupportedOperationException uoe) {
-            System.out.printf ("Method `%s` is not implemened%n", uoe.getMessage ()); // SYSOUT
+            System.out.printf ("Method `%s` is not implemened%n", uoe.getMessage ());
         } catch (AssertionError ae) {
-            System.out.println ("Wrong answer given"); // SYSOUT
-            System.out.println (ae.getMessage ()); // SYSOUT
+            System.out.println ("Wrong answer given");
+            System.out.println (ae.getMessage ());
+        } catch (NullPointerException npe) {
+            System.out.println ("Looks like you missed to check for NULL something");
+            Optional.ofNullable (npe.getMessage ()).ifPresent (message -> {                
+                System.out.println ("Message: " + message);
+            });
+        } catch (Exception e) {
+            System.out.println ("You made something wrong");
+            e.printStackTrace ();
         }
     }
     
@@ -75,6 +90,21 @@ public class StreamTasksMain {
         
         assertOutput ("Task 17", imp.task17 (), false, Stream.iterate (0, i -> i + 1).limit (9933).collect (Collectors.toList ()));
         assertOutput ("Task 18", imp.task18 (uniqueNames, 4), false, uniqueNames.subList (0, 4));
+        assertOutput ("Task 19", imp.task19 (uniqueNames, 5), false, List.of ("Boris", "David"));
+        
+        assertOutput ("Task 20", imp.task20 (
+            nonUniqueNamesWithNulls, (a, b) -> Integer.compare (a.length (), b.length ()
+        )), false, List.of (
+            "Efim", "Efim", "Efim", "Efim", "Boris", "Boris", "David", "David", "David", 
+            "Andrey", "Feofan", "Andrey", "Clavdij", "Clavdij"
+        ));
+        
+        assertOutput ("Task 21", imp.task21 (List.of ("A", "B", "C"), List.of ("D", "E", "X")), false, 
+                Set.of ("A", "B", "C", "D", "E", "X"));
+        
+        final var name2value = new HashMap <> (Map.of ("Andrey", 43, "Boris", 12, "David", -9, "Efim", 78, "Feofan", 93));
+        assertOutput ("Task 22", imp.task22 (uniqueNames, name2value), false, Arrays.asList (43, 12, null, -9, 78, 93));
+        assertOutput ("Task 23", imp.task23 (uniqueNames, name2value), 43 + 12 + -9 + 78 + 93);
     }
     
     @SuppressWarnings ("unused")
@@ -102,7 +132,7 @@ public class StreamTasksMain {
         );
         
         for (int i = 0; i < expected.size (); i++) {
-            assert expected.get (i).equals (actual.get (i)) : String.format (
+            assert Objects.equals (expected.get (i), actual.get (i)) : String.format (
                 "Test: %s%nValue `%s` was expected on position %d (actual value: %s)",
                 test, expected.get (i), i, actual.get (i)
             );
