@@ -5,19 +5,24 @@ To check yourself you will need to implement some methods with described
 logic using knoledge of Streams, Lambdas, Method handlers and other 
 functional things.
 
+### What to do
+
+You just need to implement methods that are declared and stubbed in class `tasks.StreamTasks` in `src` folder.
+
 ### Running tests
 
 Due to this project is orientated for beginners **no dependent libraries** are required.
 
 * You will need just a **JVM of 11 version (or higher)**.
 
-Clone this repository to your computer and then run main method from `StreamTasksMain` class in your preferred IDE or type in console:
+Clone this repository to your computer and then run main method from `tasks.StreamTasksMain` 
+class in your preferred IDE or type in console:
 
 ```bash
 javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain
 ```
 
-Flag `-ea` is required to enable `assert` java key word for tests checker.
+Flag `-ea` is required to enable `assert` java key word for tests checker. Otherwise all tests will not be run properly.
 
 #### Check program and verdicts
 
@@ -34,7 +39,8 @@ Until you solved all tasks with verdict `accepted` the program will finish with 
 
 #### Solutions
 
-In case you really don't know how to solve some task than you can see solution in `StreamTasksSolution` class.
+In case you really don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` class.
+
 Try to avoid this action :)
 
 #### Challenges
