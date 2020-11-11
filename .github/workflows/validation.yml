@@ -17,4 +17,4 @@ jobs:
       with:
         java-version: 11
     - name: Run tests
-      run: javac -d bin src/*.java && java -ea -cp bin StreamTasksMain validate
+      run: javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain validate

@@ -1,3 +1,4 @@
+package tasks;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class StreamTasks {
     }
     
     /**
-     * @return Stream of names with last names (Nick -> Nick Smith, Bob -> Bob Smith)
+     * @return Stream of names with last name `Smith` ('Nick' -> 'Nick Smith', 'Bob' -> 'Bob Smith')
      */
     public Stream <String> task8 (List <String> names) {
         throw new UnsupportedOperationException ("task8");

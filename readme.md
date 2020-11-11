@@ -14,7 +14,7 @@ Due to this project is orientated for beginners **no dependent libraries** are r
 Clone this repository to your computer and then run main method from `StreamTasksMain` class in your preferred IDE or type in console:
 
 ```bash
-javac -d bin/ src/*.java && java -ea -cp bin/ StreamTasksMain
+javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain
 ```
 
 Flag `-ea` is required to enable `assert` java key word for tests checker.
