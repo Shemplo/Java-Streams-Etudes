@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 public class StreamTasks {
     
+    // All methods bellow can be solved in a single line
+    
     /**
      * @return Set of given names
      */
@@ -31,7 +33,7 @@ public class StreamTasks {
     }
     
     /**
-     * @return All numbers from segment [0, 7]
+     * @return All integer numbers from segment [0, 7]
      */
     public List <Integer> task4 () {
         throw new UnsupportedOperationException ("task4");
@@ -66,7 +68,7 @@ public class StreamTasks {
     }
     
     /**
-     * @return Stream of non-null names with last names
+     * @return Stream of non-null names with last name `Smith`
      */
     public Stream <String> task9 (List <String> names) {
         throw new UnsupportedOperationException ("task9");
@@ -130,20 +132,22 @@ public class StreamTasks {
     
     /**
      * @return Stream of names with given length (do not include other names)
+     * @hint See the names of method arguments
      */
     public Stream <String> task18 (List <String> names, int streamLength) {
         throw new UnsupportedOperationException ("task18");
     }
     
     /**
-     * @return Stream of names with given length
+     * @return Stream of names with given length (do not include other names)
+     * @hint See the names of method arguments
      */
     public Stream <String> task19 (List <String> names, int nameLength) {
         throw new UnsupportedOperationException ("task19");
     }
     
     /**
-     * @return Stream of names sorted by given comparator (be careful, NULL can be in names)
+     * @return Stream of names sorted by given comparator (be careful, NULLs can be in names)
      */
     public Stream <String> task20 (List <String> names, Comparator <String> comparator) {
         throw new UnsupportedOperationException ("task19");

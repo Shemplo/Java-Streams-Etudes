@@ -19,18 +19,22 @@ javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin 
 
 Flag `-ea` is required to enable `assert` java key word for tests checker.
 
-#### Possible cases:
+#### Check program and verdicts
 
-* If you implemented successfully all methods in `StreamTasks` class you will see message `All tests completed!`
-* If you missed to implement some method you will see message like `Method 'task[N]' is not implemened`
-* If you implemented wrong login you will see message about an error
+Check program will run tests for all tasks and then write verdict for each of tasks.
+Possible verdicts:
+
+* **accepted** - you solved this task
+* **wrong answer** - you almost solved this task (code compiles but login is wrong)
+* **not implemented** - you didn't start to implement this task
+* **missed NULL check** - you forgot to check something for `null` reference
+* **runtime exception** - something goes extremely bad
+
+Until you solved all tasks with verdict `accepted` the program will finish with non zero exit code.
 
 #### Solutions
 
 In case you really don't know how to solve some task than you can see solution in `StreamTasksSolution` class.
 Try to avoid this action :)
-
-Remark: _code in `*Main` class is not optimal due to it shouldn't give hints_. 
-The most proper solutions are placed in `StreamTasksSolution` class.
 
 ##### Good luck, have fun!

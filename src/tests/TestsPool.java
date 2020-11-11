@@ -247,7 +247,7 @@ public class TestsPool {
     private TaskTests <?, ?> prepareTask18 (StreamTasks ref) {
         final TF2 f = (n, m) -> (impl, checker) -> {
             final var names = randomSubsequence (NAMES, n, R);
-            checker.accept (impl.task19 (names, m), list (ref.task19 (names, m)));
+            checker.accept (impl.task18 (names, m), list (ref.task18 (names, m)));
         };
         
         return single (f.apply (10, 7)).add (f.apply (15, 20)).add (f.apply (NAMES.size () + 7, 20));
@@ -335,7 +335,7 @@ public class TestsPool {
     private TaskTests <?, ?> prepareTask25 (StreamTasks ref) {
         final TF5 f = (n, m, k, a, b) -> (impl, checker) -> {
             final var numbers = randomSubsequence (INT_NUMBERS, n, R);
-            checker.accept (impl.task24 (numbers, m, k), list (ref.task24 (numbers, m, k)));
+            checker.accept (impl.task25 (numbers, m, k, a, b), list (ref.task25 (numbers, m, k, a, b)));
         };
         
         return single (f.apply (10, 2, 4, 5, 8)).add (f.apply (20, 4, 10, 12, 12))
