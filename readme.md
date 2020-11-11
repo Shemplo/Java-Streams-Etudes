@@ -25,7 +25,7 @@ Check program will run tests for all tasks and then write verdict for each of ta
 Possible verdicts:
 
 * **accepted** - you solved this task
-* **wrong answer** - you almost solved this task (code compiles but login is wrong)
+* **wrong answer** - you almost solved this task (code compiles but logic is wrong)
 * **not implemented** - you didn't start to implement this task
 * **missed NULL check** - you forgot to check something for `null` reference
 * **runtime exception** - something goes extremely bad
@@ -36,5 +36,11 @@ Until you solved all tasks with verdict `accepted` the program will finish with 
 
 In case you really don't know how to solve some task than you can see solution in `StreamTasksSolution` class.
 Try to avoid this action :)
+
+#### Challenges
+
+You can also use this repository for different challenges. 
+For example, you can check how many tasks you can do in limited time 
+or how many tasks you can do with single run of tests (on the first attempt), ...
 
 ##### Good luck, have fun!
