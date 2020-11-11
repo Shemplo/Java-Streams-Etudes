@@ -1,5 +1,9 @@
 ## Java Streams Etudes
 
+[![Language](https://img.shields.io/badge/language-java-red.svg)](https://github.com/Shemplo/Java-Streams-Etudes/blob/master/)
+[![GitHub license](https://img.shields.io/github/license/Shemplo/Java-Streams-Etudes.svg)](https://github.com/Shemplo/Java-Streams-Etudes/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Shemplo/Java-Streams-Etudes.svg)](https://github.com/Shemplo/Java-Streams-Etudes/stargazers)
+
 This repository can be useful if you are beginner in _Java Stream API_. 
 To check yourself you will need to implement some methods with described
 logic using knoledge of Streams, Lambdas, Method handlers and other 
