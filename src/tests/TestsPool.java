@@ -11,10 +11,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -53,15 +55,15 @@ public class TestsPool {
     
     public TestsPool (StreamTasks reference) {
         pool = List.of (
-            prepareTask1 (reference),
-            prepareTask2 (reference),
-            prepareTask3 (reference),
-            prepareTask4 (reference),
+            prepareTask1  (reference),
+            prepareTask2  (reference),
+            prepareTask3  (reference),
+            prepareTask4  (reference),
             prepareTasks5n6 (reference, false),
             prepareTasks5n6 (reference, true),
-            prepareTask7 (reference),
-            prepareTask8 (reference),
-            prepareTask9 (reference),
+            prepareTask7  (reference),
+            prepareTask8  (reference),
+            prepareTask9  (reference),
             prepareTask10 (reference),
             prepareTask11 (reference),
             prepareTask12 (reference),
@@ -96,7 +98,14 @@ public class TestsPool {
             prepareTask41 (reference),
             prepareTask42 (reference),
             prepareTask43 (reference),
-            prepareTask44 (reference)
+            prepareTask44 (reference),
+            prepareTask45 (reference),
+            prepareTask46 (reference),
+            prepareTask47 (reference),
+            prepareTask48 (reference),
+            prepareTask49 (reference),
+            prepareTask50 (reference),
+            prepareTask51 (reference)
         );
     }
     
@@ -238,7 +247,7 @@ public class TestsPool {
     private TaskTests <?, ?> prepareTask15 (StreamTasks ref) {
         final TF1 f = n -> (impl, checker) -> {
             final var numbers = randomSubsequence (STR_NUMBERS, n, R);
-            checker.accept (impl.task15 (numbers), list (ref.task15 (numbers).mapToObj (i -> i)));
+            checker.accept (impl.task15 (numbers), list (ref.task15 (numbers)));
         };
         
         return single (f.apply (1)).add (f.apply (5)).add (f.apply (NAMES.size () + 3));
@@ -255,7 +264,7 @@ public class TestsPool {
     
     private TaskTests <?, ?> prepareTask17 (StreamTasks ref) {
         final TF0 f = () -> (impl, checker) -> {
-            checker.accept (impl.task17 (), list (ref.task17 ().mapToObj (i -> i)));
+            checker.accept (impl.task17 (), list (ref.task17 ()));
         };
         
         return single (f.get ());
@@ -324,12 +333,12 @@ public class TestsPool {
     
     private TaskTests <?, ?> prepareTask23 (StreamTasks ref) {
         return single ((impl, checker) -> {
-            final var names = listOfUniques (randomSubsequence (NAMES, 10, R).stream ());
+            final var names = listOfUniques (randomSubsequence (NAMES, 10, R));
             final var name2value = Map.of (names.get (0), 43, names.get (1), -32, names.get (3), 150);
             checker.accept (impl.task23 (names, name2value), ref.task23 (names, name2value));
         }).add ((impl, checker) -> {
             final var numbers = listSequence (0, 10, i -> Integer.parseInt (STR_NUMBERS.get (i)));
-            final var names = listOfUniques (randomSubsequence (NAMES, 15, R).stream ());
+            final var names = listOfUniques (randomSubsequence (NAMES, 15, R));
             final var name2value = Map.of (
                 names.get (0), numbers.get (0), names.get (1), numbers.get (1), 
                 names.get (3), numbers.get (3), names.get (5), numbers.get (5)
@@ -591,6 +600,126 @@ public class TestsPool {
         return single (f.apply (1)).add (f.apply (5)).add (f.apply (12)).add (f.apply (86));
     }
     
+    private TaskTests <?, ?> prepareTask45 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var accumulator = new ArrayList <Integer> ();
+            final Consumer <Integer> handler = accumulator::add;
+            
+            final var numbers = randomSubsequence (INT_NUMBERS, n, R);
+            final var answer = new ArrayList <> (Set.copyOf (numbers));
+            Collections.sort (answer);
+            
+            impl.task45 (numbers.stream ().map (Integer::toHexString), handler);
+            checker.accept (accumulator, answer);
+        };
+        
+        return single (f.apply (1)).add (f.apply (10)).add (f.apply (24)).add (f.apply (97))
+             . add (f.apply (INT_NUMBERS.size () + 6));
+    }
+    
+    private TaskTests <?, ?> prepareTask46 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var ps = IntStream.range (0, n).<Predicate <String>> mapToObj (
+                i -> str -> str.toLowerCase ().contains (String.format ("%c", 'a' + i))
+            ).collect (Collectors.toList ());
+            
+            final Predicate <String> pImpl = impl.task46 (ps), pRef = ref.task46 (ps);
+            final var names = randomSubsequence (NAMES, m, R);
+            
+            checker.accept (
+                impl.task43 (names.stream (), pImpl, __ -> false), 
+                list (ref.task43 (names.stream (), pRef, __ -> false))
+            );
+        };
+        
+        return single (f.apply (1, 1)).add (f.apply (10, 10)).add (f.apply (24, 10))
+             . add (f.apply (10, 30)).add (f.apply (25, NAMES.size () + 6));
+    }
+    
+    private TaskTests <?, ?> prepareTask47 (StreamTasks ref) {
+        final var presets = List.of (
+            "(((())", "(((())))", "()(()))", "()(())", "((()()(()))())", "((()()(()))(())", 
+            ")()()))()(()())", "((()()()()))", "(((((()()((())))((()))(((((()))))))))))((()))",
+            "((((()))((()))))(((((())(()()()()())))))", "((((((())((()))))(()(()()()())))))",
+            "(((((()))(()))((((())((()()()()()))(((()))))))))((())()))(((())())()())((())(()))"
+        );
+        
+        final TF1 f = n -> (impl, checker) -> {
+            final var sequence = presets.get (n);
+            checker.accept (
+                impl.task47 (sequence.chars ()) ? 1 : 0, 
+                ref.task47 (sequence.chars ()) ? 1 : 0
+            );
+        };
+        
+        final var tests = single (f.apply (1));
+        IntStream.range (1, presets.size ()).forEach (i -> tests.add (f.apply (i)));
+        return tests;
+    }
+    
+    private TaskTests <?, ?> prepareTask48 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var answer = new ArrayList <Integer> ();
+            answer.add (0);
+            
+            final Supplier <Integer> delta = () -> {
+                final var d = R.nextInt (1000);
+                
+                answer.add (answer.get (answer.size () - 1) + d);
+                return d;
+            };
+            
+            final var provided = list (impl.task48 (n, delta));
+            assert answer.size () == n && provided.size () == n : String.format (
+                "Stream should countain %d numbers (actual size: %d)", 
+                n, provided.size ()
+            );
+            
+            checker.accept (provided, answer);
+        };
+        
+        return single (f.apply (1)).add (f.apply (20)).add (f.apply (112));
+    }
+    
+    private TaskTests <?, ?> prepareTask49 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var number = R.nextInt (n);
+            
+            final var counter = new AtomicInteger ();
+            final ToIntFunction <Integer> comparator = i -> {
+                counter.incrementAndGet (); // how much time comparator was called
+                return (int) Math.signum (i - number);
+            };
+            
+            checker.accept (impl.task49 (comparator, n), number);
+            assert counter.get () <= Math.ceil (Math.log (n) / Math.log (2)) + 1 
+                 : "You used too many comparing operations";
+        };
+        
+        return single (f.apply (100)).add (f.apply (1)).add (f.apply (1000))
+             . add (f.apply (100000)).add (f.apply (1000000));
+    }
+    
+    private TaskTests <?, ?> prepareTask50 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var names = randomSubsequence (NAMES, n, R);
+            checker.accept (impl.task50 (names).limit (m), list (ref.task50 (names).limit (m)));
+        };
+        
+        return single (f.apply (1, 3)).add (f.apply (5, 7)).add (f.apply (3, 8)).add (f.apply (5, 16))
+             . add (f.apply (NAMES.size () + 4, 4)).add (f.apply (3, NAMES.size ()));
+    }
+    
+    private TaskTests <?, ?> prepareTask51 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var numbers = randomSubsequence (INT_NUMBERS, n, R);
+            checker.accept (impl.task51 (numbers), list (ref.task51 (numbers)));
+        };
+        
+        return single (f.apply (1)).add (f.apply (5)).add (f.apply (8))
+             . add (f.apply (11)).add (f.apply (84)).add (f.apply (389));
+    }
+    
     // USEFUL METHODS //
     
     private static <R, O> TaskTests <R, O> empty () {
@@ -616,12 +745,16 @@ public class TestsPool {
         return stream.collect (Collectors.toList ());
     }
     
+    private static List <Integer> list (IntStream stream) {
+        return list (stream.mapToObj (i -> i));
+    }
+    
     private static <T> Set <T> set (Stream <T> stream) {
         return stream.collect (Collectors.toSet ());
     }
     
-    private static <T> List <T> listOfUniques (Stream <T> values) {
-        return values.distinct ().collect (Collectors.toList ());
+    private static <T> List <T> listOfUniques (List <T> values) {
+        return List.copyOf (Set.copyOf (values));
     }
     
     private static <T> List <T> listSequence (int from, int length, IntFunction <T> converter) {

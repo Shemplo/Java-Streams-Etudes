@@ -3,9 +3,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -370,6 +372,69 @@ public class StreamTasks {
      */
     public int task44 (Supplier <Integer> generator, int number) {
         throw new UnsupportedOperationException ("task44");
+    }
+    
+    /**
+     * @return Call consumer on each unique parsed hex integer number in sorted order from given stream
+     * @lines 1
+     */
+    public void task45 (Stream <String> numbers, Consumer <Integer> consumer) {
+        throw new UnsupportedOperationException ("task45");
+    }
+    
+    /**
+     * @return Predicate that is disjunction of given predicates (or constant false if not predicates in list)
+     * @depends Method of {@link #task43(Stream, Predicate, Predicate) task 43} is also used for verification
+     * @lines 1
+     */
+    public Predicate <String> task46 (List <Predicate <String>> predicates) {
+        throw new UnsupportedOperationException ("task46");
+    }
+    
+    /**
+     * @return Check whether given sequence of bracket characters is correct (using only streams, of course)
+     * @hint Bracket - is '(' or ')'  character, and stream contains codes of this characters that can be compared via '=='
+     * @hint Guaranteed that sequence contains no more than 1000 characters
+     * @lines 1
+     */
+    public boolean task47 (IntStream brackets) {
+        throw new UnsupportedOperationException ("task47");
+    }
+    
+    /**
+     * @return Generate sequence of numbers (starting with 0) of given length and provided delta between neighbor numbers
+     * (new delta for each pair of numbers)
+     * @lines 1
+     */
+    public IntStream task48 (int length, Supplier <Integer> delta) {
+        throw new UnsupportedOperationException ("task48");
+    }
+    
+    /**
+     * @return Guess the hidden integer number on interval [0, upper bound) using as small number of attempts as possible
+     * @hint Use comparator to check whether your number is less (-1) or more (1) or equal (0)
+     * @lines 4
+     */
+    public int task49 (ToIntFunction <Integer> comparator, int upperBound) {
+        throw new UnsupportedOperationException ("task49");
+    }
+    
+    /**
+     * @return Stream of cycled elements from given sequence
+     * @hint -> [A, B, C, D] -> [A, B, C, D, A, B, C, D, A, B, C, ...]
+     * @lines 1
+     */
+    public <T> Stream <T> task50 (List <T> values) {
+        throw new UnsupportedOperationException ("task50");
+    }
+    
+    /**
+     * @return Stream of accumulated values (each value is sum of previous values of input sequence)
+     * @hint -> [1, 2, 3, 4, 5, 6, 7] -> [1, 3, 6, 10, 15, 21, 28]
+     * @lines 3
+     */
+    public IntStream task51 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("task51");
     }
     
 }

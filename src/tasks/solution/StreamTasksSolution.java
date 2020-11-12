@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -142,7 +144,7 @@ public class StreamTasksSolution extends StreamTasks {
     
     @Override
     public boolean task26 (Stream <String> names, String name) {
-        return names.filter (name::equals).findFirst ().isPresent ();
+        return names.anyMatch (name::equals);
     }
     
     @Override
@@ -243,6 +245,46 @@ public class StreamTasksSolution extends StreamTasks {
     @Override
     public int task44 (Supplier <Integer> generator, int number) {
         return Stream.generate (generator).limit (number).mapToInt (i -> i).sum ();
+    }
+    
+    @Override
+    public void task45 (Stream <String> numbers, Consumer <Integer> consumer) {
+        numbers.map (str -> Integer.parseInt (str, 16)).sorted ().distinct ().forEach (consumer);
+    }
+    
+    @Override
+    public Predicate <String> task46 (List <Predicate <String>> predicates) {
+        return predicates.stream ().reduce (Predicate::or).orElse (__ -> false);
+    }
+    
+    @Override
+    public boolean task47 (IntStream brackets) {
+        return brackets.map (c -> c == '(' ? 1 : -1).reduce (0, (cur, d) -> cur + d < 0 ? Integer.MIN_VALUE : cur + d) == 0;
+    }
+    
+    @Override
+    public IntStream task48 (int length, Supplier <Integer> delta) {
+        return IntStream.iterate (0, i -> i + delta.get ()).limit (length);
+    }
+    
+    @Override
+    public int task49 (ToIntFunction <Integer> c, int upperBound) {
+        return Stream.iterate (new int [] {0, upperBound}, i -> i [1] - i [0] != 0, i -> {
+            final int m = (i [1] + i [0]) / 2, rel = c.applyAsInt (m);
+            return rel < 0 ? new int [] {m, i [1]} : (rel > 0 ? new int [] {i [0], m} : new int [] {m, m});
+        }).map (arr -> (arr [0] + arr [1]) / 2).reduce ((a, b) -> b).orElse (upperBound / 2);
+    }
+    
+    @Override
+    public <T> Stream <T> task50 (List <T> values) {
+        return Stream.iterate (0, i -> i + 1).map (i -> values.get (i % values.size ()));
+    }
+    
+    @Override
+    public IntStream task51 (List <Integer> n) {
+        return Stream.iterate (new int [] {0, n.get (0)}, 
+            i -> new int [] {i [0] + 1, i [1] + n.get (i [0] + 1)}
+        ).limit (n.size ()).mapToInt (i -> i [1]);
     }
     
 }

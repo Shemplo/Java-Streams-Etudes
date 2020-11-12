@@ -5,9 +5,10 @@
 [![GitHub stars](https://img.shields.io/github/stars/Shemplo/Java-Streams-Etudes.svg)](https://github.com/Shemplo/Java-Streams-Etudes/stargazers)
 
 This repository can be useful if you are beginner in _Java Stream API_. 
-To check yourself you will need to implement some methods with described
-logic using knoledge of Streams, Lambdas, Method handlers and other 
-functional things.
+To check yourself you will need to implement some methods with described logic using knowledge of 
+Streams, Lambdas, Method handlers and other functional things.
+
+There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
 ### What to do
 
@@ -44,6 +45,10 @@ Until you solved all tasks with verdict `accepted` the program will finish with 
 ##### Examples
 
 You can run check program with argument `example` to see how it will look like.
+
+```bash
+javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain example
+```
 
 
 In class `tasks.StreamTasksExample` there are some implemented tasks 
