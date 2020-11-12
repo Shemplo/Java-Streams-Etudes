@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -202,6 +204,45 @@ public class StreamTasksSolution extends StreamTasks {
     @Override
     public int task38 (List <List <Integer>> matrix) {
         return (int) matrix.stream ().filter (row -> row.stream ().mapToInt (i -> i).sum () < 0).count ();
+    }
+    
+    @Override
+    public Stream <String> task39 (Stream <String> names) {
+        return names.sorted (Comparator.reverseOrder ());
+    }
+    
+    @Override
+    public List <List <Integer>> task40 (List <Integer> numbers, int length) {
+        return IntStream.range (0, (int) Math.ceil (numbers.size () * 1.0 / length))
+             . mapToObj (i -> numbers.subList (i * length, Math.min (numbers.size (), (i + 1) * length)))
+             . collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <List <Integer>> task41 (List <List <Integer>> numbers, int l, int c) {
+        final var flat = IntStream.range (0, l * c).mapToObj (i -> numbers.get (l - i / c - 1).get (c - i % c - 1))
+            . collect (Collectors.toList ());
+        return task40 (flat, c);
+    }
+    
+    @Override
+    public List <List <Integer>> task42 (List <List <Integer>> numbers, int l, int c) {
+        final var flat = IntStream.range (0, l * c).mapToObj (i -> numbers.get (i % c).get (i / c))
+            . collect (Collectors.toList ());
+        return task40 (flat, c);
+    }
+    
+    @Override
+    public Stream <String> task43 (
+        Stream <String> names, Predicate <String> condition1, Predicate <String> condition2
+    ) {
+        final var condition = condition1.or (condition2);
+        return names.filter (n -> n != null && condition.test (n));
+    }
+    
+    @Override
+    public int task44 (Supplier <Integer> generator, int number) {
+        return Stream.generate (generator).limit (number).mapToInt (i -> i).sum ();
     }
     
 }
