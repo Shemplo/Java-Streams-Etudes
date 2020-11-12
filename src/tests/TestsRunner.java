@@ -48,7 +48,7 @@ public class TestsRunner {
             } finally {
                 final var end = System.currentTimeMillis ();
                 
-                System.out.printf ("[%4dms] %-20s%n", end - start, verdict.text);
+                System.out.printf ("[%6dms] %-20s%n", end - start, verdict.text);
                 Optional.ofNullable (throwable).ifPresent (t -> {
                     System.out.printf ("  %s%n", t.getMessage ());
                 });

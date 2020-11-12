@@ -210,10 +210,75 @@ public class StreamTasks {
     }
     
     /**
-     * @return List of stream elements
+     * @return List of stream elements (names)
      */
     public List <String> task29 (Stream <String> names) {
         throw new UnsupportedOperationException ("task29");
+    }
+    
+    /**
+     * @return Set of stream elements (names)
+     */
+    public Set <String> task30 (Stream <String> names) {
+        throw new UnsupportedOperationException ("task30");
+    }
+    
+    /**
+     * @return List of some stream elements
+     * @hint Streams can be endless
+     */
+    public List <Integer> task31 (Stream <Integer> numbers) {
+        throw new UnsupportedOperationException ("task31");
+    }
+    
+    /**
+     * @return List of names wrapped to single-element lists
+     */
+    public List <List <String>> task32 (Stream <String> names) {
+        throw new UnsupportedOperationException ("task32");
+    }
+    
+    /**
+     * @return List of names wrapped to single-element lists (twice)
+     */
+    public List <List <List <String>>> task33 (Stream <String> names) {
+        throw new UnsupportedOperationException ("task33");
+    }
+    
+    /**
+     * @return List of whole names in stream
+     */
+    public List <String> task34 (Stream <List <String>> namesGroups) {
+        throw new UnsupportedOperationException ("task34");
+    }
+    
+    /**
+     * @return List of all names only from groups which contains given name
+     * @hint [[A, B, C], [B, D, F, E], [A, C]], B -> [A, B, C, B, D, F, E]
+     */
+    public List <String> task35 (Stream <List <String>> namesGroups, String name) {
+        throw new UnsupportedOperationException ("task35");
+    }
+    
+    /**
+     * @return Sum of all numbers in matrix
+     */
+    public int task36 (List <List <Integer>> matrix) {
+        throw new UnsupportedOperationException ("task36");
+    }
+    
+    /**
+     * @return Trace of square matrix (sum on main diagonal)
+     */
+    public int task37 (List <List <Integer>> matrix) {
+        throw new UnsupportedOperationException ("task37");
+    }
+    
+    /**
+     * @return Amount rows with negative sum of numbers in
+     */
+    public int task38 (List <List <Integer>> matrix) {
+        throw new UnsupportedOperationException ("task37");
     }
     
 }

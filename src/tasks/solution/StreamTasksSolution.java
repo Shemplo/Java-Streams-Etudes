@@ -158,4 +158,50 @@ public class StreamTasksSolution extends StreamTasks {
         return names.collect (Collectors.toList ());
     }
     
+    @Override
+    public Set <String> task30 (Stream <String> names) {
+        return names.collect (Collectors.toSet ());
+    }
+    
+    @Override
+    public List <Integer> task31 (Stream <Integer> numbers) {
+        return numbers.limit (10).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <List <String>> task32 (Stream <String> names) {
+        return names.map (List::of).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <List <List <String>>> task33 (Stream <String> names) {
+        return names.map (List::of).map (List::of).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <String> task34 (Stream <List <String>> namesGroups) {
+        return namesGroups.flatMap (List::stream).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <String> task35 (Stream <List <String>> namesGroups, String name) {
+        return namesGroups.filter (grp -> grp.indexOf (name) != -1).flatMap (List::stream)
+             . collect (Collectors.toList ());
+    }
+    
+    @Override
+    public int task36 (List <List <Integer>> matrix) {
+        return (int) matrix.stream ().flatMap (List::stream).mapToInt (i -> i).sum ();
+    }
+    
+    @Override
+    public int task37 (List <List <Integer>> matrix) {
+        return (int) IntStream.range (0, matrix.size ()).map (i -> matrix.get (i).get (i)).sum ();
+    }
+    
+    @Override
+    public int task38 (List <List <Integer>> matrix) {
+        return (int) matrix.stream ().filter (row -> row.stream ().mapToInt (i -> i).sum () < 0).count ();
+    }
+    
 }

@@ -41,6 +41,15 @@ Possible verdicts:
 
 Until you solved all tasks with verdict `accepted` the program will finish with non zero exit code.
 
+##### Examples
+
+You can run check program with argument `example` to see how it will look like.
+
+
+In class `tasks.StreamTasksExample` there are some implemented tasks 
+(not guaranteed that implementation is correct or in optimal way),
+so this class will be tested if you run check program in `example` mode. 
+
 #### Solutions
 
 In case you really don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` class.

@@ -79,7 +79,16 @@ public class TestsPool {
             prepareTask26 (reference),
             prepareTask27 (reference),
             prepareTask28 (reference),
-            prepareTask29 (reference)
+            prepareTask29 (reference),
+            prepareTask30 (reference),
+            prepareTask31 (reference),
+            prepareTask32 (reference),
+            prepareTask33 (reference),
+            prepareTask34 (reference),
+            prepareTask35 (reference),
+            prepareTask36 (reference),
+            prepareTask37 (reference),
+            prepareTask38 (reference)
         );
     }
     
@@ -390,6 +399,111 @@ public class TestsPool {
         };
         
         return single (f.apply (1)).add (f.apply (20)).add (f.apply (NAMES.size () + 4));
+    }
+    
+    private TaskTests <?, ?> prepareTask30 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var names = randomSubsequence (NAMES, n, R);
+            checker.accept (impl.task30 (names.stream ()), ref.task30 (names.stream ()));
+        };
+        
+        return single (f.apply (1)).add (f.apply (30)).add (f.apply (NAMES.size () + 1));
+    }
+    
+    private TaskTests <?, ?> prepareTask31 (StreamTasks ref) {
+        final TF0 f = () -> (impl, checker) -> {
+            final var stream = Stream.iterate (0, i -> i + 1);
+            final var answer = impl.task31 (stream);
+            checker.accept (answer, answer);
+        };
+        
+        return single (f.get ());
+    }
+    
+    private TaskTests <?, ?> prepareTask32 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var names = randomSubsequence (NAMES, n, R);
+            checker.accept (impl.task32 (names.stream ()), ref.task32 (names.stream ()));
+        };
+        
+        return single (f.apply (1)).add (f.apply (20)).add (f.apply (NAMES.size () + 4));
+    }
+    
+    private TaskTests <?, ?> prepareTask33 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var names = randomSubsequence (NAMES, n, R);
+            checker.accept (impl.task33 (names.stream ()), ref.task33 (names.stream ()));
+        };
+        
+        return single (f.apply (1)).add (f.apply (20)).add (f.apply (NAMES.size () + 4));
+    }
+    
+    private TaskTests <?, ?> prepareTask34 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var names = IntStream.range (0, n)
+                . mapToObj (i -> randomSubsequence (NAMES, m, R))
+                . collect (Collectors.toList ());
+            
+            checker.accept (impl.task34 (names.stream ()), ref.task34 (names.stream ()));
+        };
+        
+        return single (f.apply (1, 0)).add (f.apply (10, 0)).add (f.apply (7, 3))
+             . add (f.apply (15, 5)).add (f.apply (20, NAMES.size () + 1));
+    }
+    
+    private TaskTests <?, ?> prepareTask35 (StreamTasks ref) {
+        final TF3 f = (n, m, k) -> (impl, checker) -> {
+            final var names = IntStream.range (0, n)
+                . mapToObj (i -> randomSubsequence (NAMES, m + i, R))
+                . collect (Collectors.toList ());
+            final var name = NAMES.get (k);
+            
+            checker.accept (impl.task35 (names.stream (), name), ref.task35 (names.stream (), name));
+        };
+        
+        int lim = NAMES.size ();
+        return single (f.apply (1, 0, 0)).add (f.apply (10, 5, 0)).add (f.apply (17, 10, 0))
+             . add (f.apply (15, 15, R.nextInt (lim)))
+             . add (f.apply (20, NAMES.size () + 1, R.nextInt (lim)));
+    }
+    
+    private TaskTests <?, ?> prepareTask36 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var matrix = IntStream.range (0, n)
+                . mapToObj (i -> List.copyOf (randomSubsequence (INT_NUMBERS, m, R)))
+                . collect (Collectors.toUnmodifiableList ());
+            
+            checker.accept (impl.task36 (matrix), ref.task36 (matrix));
+        };
+        
+        return single (f.apply (1, 1)).add (f.apply (2, 2)).add (f.apply (5, 5))
+             . add (f.apply (10, 15)).add (f.apply (20, INT_NUMBERS.size () + 1));
+    }
+    
+    private TaskTests <?, ?> prepareTask37 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var matrix = IntStream.range (0, n)
+                . mapToObj (i -> List.copyOf (randomSubsequence (INT_NUMBERS, m, R)))
+                . collect (Collectors.toUnmodifiableList ());
+            
+            checker.accept (impl.task37 (matrix), ref.task37 (matrix));
+        };
+        
+        return single (f.apply (1, 1)).add (f.apply (2, 2)).add (f.apply (5, 5)).add (f.apply (10, 10))
+             . add (f.apply (INT_NUMBERS.size () + 3, INT_NUMBERS.size () + 3));
+    }
+    
+    private TaskTests <?, ?> prepareTask38 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var matrix = IntStream.range (0, n)
+                . mapToObj (i -> List.copyOf (randomSubsequence (INT_NUMBERS, m, R)))
+                . collect (Collectors.toUnmodifiableList ());
+            
+            checker.accept (impl.task38 (matrix), ref.task38 (matrix));
+        };
+        
+        return single (f.apply (1, 1)).add (f.apply (2, 5)).add (f.apply (5, 10)).add (f.apply (10, 5))
+             . add (f.apply (100, INT_NUMBERS.size () + 3));
     }
     
     // USEFUL METHODS //
