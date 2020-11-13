@@ -1,5 +1,6 @@
 package tests;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import tasks.StreamTasks;
@@ -19,6 +20,8 @@ public class TestsRunner {
     }
     
     public int test () {
+        Locale.setDefault (Locale.ENGLISH);
+        
         final var testsNumber = testsPool.getTestsNumber ();
         int failed  = 0;
         

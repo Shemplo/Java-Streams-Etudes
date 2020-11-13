@@ -10,6 +10,8 @@ Streams, Lambdas, Method handlers and other functional things.
 
 There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
+> The number of almost independent tasks is **60** now
+
 ### What to do
 
 You just need to implement methods that are declared and stubbed in class `tasks.StreamTasks` in `src` folder.

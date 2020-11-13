@@ -11,6 +11,7 @@ import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import tasks.utils.Box;
 import tasks.utils.Item;
 
 public class StreamTasks {
@@ -469,6 +470,48 @@ public class StreamTasks {
      */
     public Map <Character, Map <String, List <Item>>> task55 (List <Item> items) {
         throw new UnsupportedOperationException ("task55");
+    }
+    
+    /**
+     * @return Pack all items into single box
+     * @lines 1
+     */
+    public Box task56 (Stream <Item> items) {
+        throw new UnsupportedOperationException ("task56");
+    }
+    
+    /**
+     * @return Pack all items into single box (items come in parallel)
+     * @lines 1
+     */
+    public Box task57 (Stream <Item> items) {
+        throw new UnsupportedOperationException ("task56");
+    }
+    
+    /**
+     * @return Unpack boxes
+     * @lines 1
+     */
+    public Stream <Item> task58 (List <Box> boxes) {
+        throw new UnsupportedOperationException ("task58");
+    }
+    
+    /**
+     * @return Unpack boxes only if items in them is not heavier then given weight
+     * @lines &le; 2
+     */
+    public Stream <Item> task59 (List <Box> boxes, double weightLimit) {
+        throw new UnsupportedOperationException ("task59");
+    }
+    
+    /**
+     * Put items in the box whose total weight does not exceed the specified limit
+     * @hint Weight of the box is calculated automatically
+     * @hint You can't skip items
+     * @lines &le; 2
+     */
+    public void task60 (Stream <Item> items, double weightLimit, Box box) {
+        throw new UnsupportedOperationException ("task60");
     }
     
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tasks.StreamTasks;
+import tasks.utils.Box;
 import tasks.utils.Item;
 
 public class StreamTasksSolution extends StreamTasks {
@@ -306,6 +308,33 @@ public class StreamTasksSolution extends StreamTasks {
     @Override
     public Map <Character, Map <String, List <Item>>> task55 (List <Item> items) {
         return items.stream ().collect (Collectors.groupingBy (Item::getCategory, Collectors.groupingBy (Item::getBarcode)));
+    }
+    
+    @Override
+    public Box task56 (Stream <Item> items) {
+        return items.sequential ().reduce (new Box (), Box::addItem, (a, b) -> a);
+    }
+    
+    @Override
+    public Box task57 (Stream <Item> items) {
+        return task56 (items);
+    }
+    
+    @Override
+    public Stream <Item> task58 (List <Box> boxes) {
+        return boxes.stream ().map (Box::getItems).flatMap (List::stream);
+    }
+    
+    @Override
+    public Stream <Item> task59 (List <Box> boxes, double weightLimit) {
+        return boxes.stream ().filter (box -> box.getItems ().stream ().map (Item::getWeight).allMatch (w -> w <= weightLimit))
+             . map (Box::getItems).flatMap (List::stream);
+    }
+    
+    @Override
+    public void task60 (Stream <Item> items, double weightLimit, Box box) {
+        final var weight = new AtomicReference <Double> (0.0);
+        items.takeWhile (item -> weight.updateAndGet (w -> w + item.getWeight ()) <= weightLimit).forEach (box::addItem);
     }
     
 }

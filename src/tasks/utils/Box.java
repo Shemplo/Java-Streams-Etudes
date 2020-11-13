@@ -9,8 +9,9 @@ public class Box extends Item {
     
     protected final List <Item> items = new LinkedList <> ();
     
-    public void addItem (Item item) {
+    public Box addItem (Item item) {
         items.add (item);
+        return this;
     }
     
     public List <Item> getItems () {

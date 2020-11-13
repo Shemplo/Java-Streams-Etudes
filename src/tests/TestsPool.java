@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,6 +23,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tasks.StreamTasks;
+import tasks.utils.Box;
 import tasks.utils.Item;
 import tests.utils.F3;
 import tests.utils.F5;
@@ -111,7 +113,12 @@ public class TestsPool {
             prepareTask52 (reference),
             prepareTask53 (reference),
             prepareTask54 (reference),
-            prepareTask55 (reference)
+            prepareTask55 (reference),
+            prepareTask56n57 (reference, false),
+            prepareTask56n57 (reference, true),
+            prepareTask58 (reference),
+            prepareTask59 (reference),
+            prepareTask60 (reference)
         );
     }
     
@@ -787,6 +794,76 @@ public class TestsPool {
              . add (f.apply (ITEMS.size () + 1));
     }
     
+    private TaskTests <?, ?> prepareTask56n57 (StreamTasks ref, boolean parallel) {
+        final BiFunction <List <Item>, StreamTasks, Box> call = (list, impl) -> {
+            final var stream = parallel ? list.parallelStream () : list.stream ();
+            return parallel ? impl.task57 (stream) : impl.task56 (stream);
+        };
+        
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = randomSubsequence (ITEMS, n, R);
+            
+            final var answer = Optional.ofNullable (call.apply (items, impl)).orElse (new Box ());
+            checker.accept (answer.getItems (), call.apply (items, ref).getItems ());
+        };
+        
+        return single (f.apply (1)).add (f.apply (22)).add (f.apply (31))
+             . add (f.apply (46)).add (f.apply (100 + R.nextInt (1000)))
+             . add (f.apply (ITEMS.size () + 2));
+    }
+    
+    private TaskTests <?, ?> prepareTask58 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var boxes = Collections.unmodifiableList (generateBoxes (n, m, 100, ref));
+            checker.accept (impl.task58 (boxes), list (ref.task58 (boxes)));
+        };
+        
+        return single (f.apply (1, 2)).add (f.apply (37, 2)).add (f.apply (79, 2))
+             . add (f.apply (90, 6)).add (f.apply (174, 6)).add (f.apply (253, 6))
+             . add (f.apply (500 + R.nextInt (1000), 18))
+             . add (f.apply (ITEMS.size () + 1, 30));
+    }
+    
+    private TaskTests <?, ?> prepareTask59 (StreamTasks ref) {
+        final TF2 f = (n, m) -> (impl, checker) -> {
+            final var boxes = Collections.unmodifiableList (generateBoxes (n, m, m * 2, ref));
+            final var weight = 2000.0 + R.nextDouble () * 500;
+            
+            checker.accept (impl.task59 (boxes, weight), list (ref.task59 (boxes, weight)));
+        };
+        
+        return single (f.apply (1, 2)).add (f.apply (17, 2)).add (f.apply (29, 2))
+             . add (f.apply (90, 6)).add (f.apply (174, 6)).add (f.apply (253, 6))
+             . add (f.apply (500 + R.nextInt (1000), 11))
+             . add (f.apply (ITEMS.size () + 1, 15));
+    }
+    
+    private TaskTests <?, ?> prepareTask60 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = new ArrayList <Item> ();
+            final var stream = Stream.generate (() -> {
+                final var item = ITEMS.get (R.nextInt (ITEMS.size ()));
+                items.add (item);
+                return item;
+            });
+            
+            final var limit = n * 1000 * R.nextDouble ();
+            final var box = new Box ();
+            
+            impl.task60 (stream, limit, box);
+            
+            final var answer = new ArrayList <> ();
+            for (int i = 0, w = 0; i < items.size () && w + items.get (i).getWeight () <= limit; i++) {
+                w += items.get (i).getWeight ();
+                answer.add (items.get (i));
+            }
+            
+            checker.accept (box.getItems (), answer);
+        };
+        
+        return single (f.apply (3)).add (f.apply (4)).add (f.apply (5)).add (f.apply (6)).add (f.apply (50));
+    }
+    
     // USEFUL METHODS //
     
     private static <R, O> TaskTests <R, O> empty () {
@@ -841,6 +918,12 @@ public class TestsPool {
         
         Collections.shuffle (list, r);
         return list;
+    }
+    
+    private static List <Box> generateBoxes (int number, int sizeFrom, int sizeDeviation, StreamTasks impl) {
+        return IntStream.range (0, number).mapToObj (__ -> {
+            return randomSubsequence (ITEMS, sizeFrom + R.nextInt (sizeDeviation), R);
+        }).map (its -> impl.task57 (its.stream ())).collect (Collectors.toList ());
     }
     
 }
