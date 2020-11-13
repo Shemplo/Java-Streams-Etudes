@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tasks.StreamTasks;
+import tasks.utils.Item;
 
 public class StreamTasksSolution extends StreamTasks {
     
@@ -138,8 +139,8 @@ public class StreamTasksSolution extends StreamTasks {
     }
     
     @Override
-    public Stream <Integer> task25 (List <Integer> numbers, int from1, int to1, int from2, int to2) {
-        return IntStream.range (0, numbers.size ()).filter (i -> (i >= from1 && i <= to1) || (i >= from2 && i <= to2)).mapToObj (numbers::get);
+    public Stream <Integer> task25 (List <Integer> ns, int f1, int t1, int f2, int t2) {
+        return IntStream.range (0, ns.size ()).filter (i -> (i >= f1 && i <= t1) || (i >= f2 && i <= t2)).mapToObj (ns::get);
     }
     
     @Override
@@ -153,8 +154,8 @@ public class StreamTasksSolution extends StreamTasks {
     }
     
     @Override
-    public Stream <String> task28 (List <String> names, List <String> lastNames) {
-        return IntStream.range (0, Math.min (names.size (), lastNames.size ())).mapToObj (i -> String.format ("%s %s", names.get (i), lastNames.get (i)));
+    public Stream <String> task28 (List <String> ns, List <String> lns) {
+        return IntStream.range (0, Math.min (ns.size (), lns.size ())).mapToObj (i -> String.format ("%s %s", ns.get (i), lns.get (i)));
     }
     
     @Override
@@ -285,6 +286,26 @@ public class StreamTasksSolution extends StreamTasks {
         return Stream.iterate (new int [] {0, n.get (0)}, 
             i -> new int [] {i [0] + 1, i [1] + n.get (i [0] + 1)}
         ).limit (n.size ()).mapToInt (i -> i [1]);
+    }
+    
+    @Override
+    public Set <String> task52 (List <Item> items) {
+        return items.stream ().map (Item::getBarcode).collect (Collectors.toSet ());
+    }
+    
+    @Override
+    public int task53 (List <Item> items, char category) {
+        return (int) items.stream ().map (Item::getCategory).filter (c -> c == category).count ();
+    }
+    
+    @Override
+    public Map <Character, List <Item>> task54 (List <Item> items) {
+        return items.stream ().collect (Collectors.groupingBy (Item::getCategory));
+    }
+    
+    @Override
+    public Map <Character, Map <String, List <Item>>> task55 (List <Item> items) {
+        return items.stream ().collect (Collectors.groupingBy (Item::getCategory, Collectors.groupingBy (Item::getBarcode)));
     }
     
 }

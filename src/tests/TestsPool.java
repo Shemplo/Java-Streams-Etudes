@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tasks.StreamTasks;
+import tasks.utils.Item;
 import tests.utils.F3;
 import tests.utils.F5;
 
@@ -105,7 +106,12 @@ public class TestsPool {
             prepareTask48 (reference),
             prepareTask49 (reference),
             prepareTask50 (reference),
-            prepareTask51 (reference)
+            prepareTask51 (reference),
+            
+            prepareTask52 (reference),
+            prepareTask53 (reference),
+            prepareTask54 (reference),
+            prepareTask55 (reference)
         );
     }
     
@@ -720,6 +726,67 @@ public class TestsPool {
              . add (f.apply (11)).add (f.apply (84)).add (f.apply (389));
     }
     
+    private static final List <Item> ITEMS = listSequence (0, 1000, i -> {
+        final var item = new Item ();
+        item.setBarcode (String.format ("%04d", R.nextInt (10000)));
+        item.setWeight (R.nextDouble () * 3000);
+        item.setCategory (randomCategory ());
+        
+        return item;
+    });
+    
+    private static char randomCategory () {
+        return (char) ('A' + R.nextInt (26));
+    }
+    
+    private TaskTests <?, ?> prepareTask52 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = randomSubsequence (ITEMS, n, R);
+            checker.accept (impl.task52 (items), ref.task52 (items));
+        };
+        
+        return single (f.apply (1)).add (f.apply (3)).add (f.apply (5))
+             . add (f.apply (8)).add (f.apply (23)).add (f.apply (88))
+             . add (f.apply (10 + R.nextInt (100)));
+    }
+    
+    private TaskTests <?, ?> prepareTask53 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = randomSubsequence (ITEMS, n, R);
+            final var cat = randomCategory ();
+            
+            checker.accept (impl.task53 (items, cat), ref.task53 (items, cat));
+        };
+        
+        return single (f.apply (1)).add (f.apply (3)).add (f.apply (7))
+             . add (f.apply (6)).add (f.apply (29)).add (f.apply (82))
+             . add (f.apply (10 + R.nextInt (100)));
+    }
+    
+    private TaskTests <?, ?> prepareTask54 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = randomSubsequence (ITEMS, n, R);
+            checker.accept (impl.task54 (items), ref.task54 (items));
+        };
+        
+        return single (f.apply (1)).add (f.apply (12)).add (f.apply (19))
+             . add (f.apply (60)).add (f.apply (94)).add (f.apply (182))
+             . add (f.apply (100 + R.nextInt (1000)))
+             . add (f.apply (ITEMS.size () + 1));
+    }
+    
+    private TaskTests <?, ?> prepareTask55 (StreamTasks ref) {
+        final TF1 f = n -> (impl, checker) -> {
+            final var items = randomSubsequence (ITEMS, n, R);
+            checker.accept (impl.task55 (items), ref.task55 (items));
+        };
+        
+        return single (f.apply (1)).add (f.apply (37)).add (f.apply (79))
+             . add (f.apply (90)).add (f.apply (174)).add (f.apply (253))
+             . add (f.apply (500 + R.nextInt (1000)))
+             . add (f.apply (ITEMS.size () + 1));
+    }
+    
     // USEFUL METHODS //
     
     private static <R, O> TaskTests <R, O> empty () {
@@ -735,10 +802,17 @@ public class TestsPool {
     }
     
     private static <T> List <T> randomSubsequence (Collection <T> values, int size, Random r) {
+        return randomSubsequence (values, Function.identity (), size, r);
+    }
+    
+    private static <T, R> List <R> randomSubsequence (
+        Collection <T> values, Function <T, R> mapper, int size, Random r
+    ) {
         final var input = List.copyOf (values);
         
         return IntStream.range (0, size).map (i -> r.nextInt (input.size ()))
-             . mapToObj (input::get).collect (Collectors.toList ());
+             . mapToObj (input::get).map (mapper)
+             . collect (Collectors.toList ());
     }
     
     private static <T> List <T> list (Stream <T> stream) {

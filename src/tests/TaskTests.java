@@ -3,6 +3,7 @@ package tests;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
@@ -44,12 +45,14 @@ public class TaskTests <R, O> {
                         : actual instanceof Stream ? Stream.class 
                         : actual instanceof Integer ? Integer.class 
                         : actual instanceof List ? List.class 
+                        : actual instanceof Map ? Map.class
                         : actual instanceof Set ? Set.class
                         : null;
         final var eType = expected instanceof IntStream ? IntStream.class 
                         : expected instanceof Stream ? Stream.class 
                         : expected instanceof Integer ? Integer.class 
                         : expected instanceof List ? List.class 
+                        : expected instanceof Map ? Map.class
                         : expected instanceof Set ? Set.class
                         : null;
         try {

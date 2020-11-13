@@ -2,6 +2,7 @@ package tests;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -96,6 +97,34 @@ public class OutputAssertions {
         );
         
         assertOutput (actual.boxed ().collect (Collectors.toList ()), expected);
+    }
+    
+    @SuppressWarnings ("unchecked")
+    public static <K, V> void assertOutput (Map <K, V> actual, Map <K, V> expected) {
+        assert actual.size () == expected.size () : String.format (
+            "Resulted map should contains %d elements (actual size: %d)", 
+            expected.size (), actual.size ()
+        );
+        
+        for (final var entry : expected.entrySet ()) {
+            assert actual.containsKey (entry.getKey ()) : String.format (
+                "Resulted map should contains key `%s`", entry.getKey ()
+            );
+            
+            if (entry.getValue () instanceof Map) {
+                final var actualMap = (Map <Object, Object>) actual.get (entry.getKey ());
+                final var expectedMap = (Map <Object, Object>) entry.getValue ();
+                assertOutput (actualMap, expectedMap);
+            } else if (entry.getValue () instanceof List) {
+                final var actualList = (List <Object>) actual.get (entry.getKey ());
+                final var expectedList = (List <Object>) entry.getValue ();
+                assertOutput (actualList, expectedList);
+            } else if (entry.getValue () instanceof Set) {
+                final var actualSet = (Set <Object>) actual.get (entry.getKey ());
+                final var expectedSet = (Set <Object>) entry.getValue ();
+                assertOutput (actualSet, expectedSet);
+            }
+        }
     }
     
 }

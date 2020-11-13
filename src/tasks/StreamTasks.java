@@ -11,6 +11,8 @@ import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import tasks.utils.Item;
+
 public class StreamTasks {
     
     // @lines [x] - means that this task can be implemented with [x] lines
@@ -435,6 +437,38 @@ public class StreamTasks {
      */
     public IntStream task51 (List <Integer> numbers) {
         throw new UnsupportedOperationException ("task51");
+    }
+    
+    /**
+     * @return Set of items' barcodes
+     * @lines 1
+     */
+    public Set <String> task52 (List <Item> items) {
+        throw new UnsupportedOperationException ("task52");
+    }
+    
+    /**
+     * @return Number of items with given category
+     * @lines 1
+     */
+    public int task53 (List <Item> items, char category) {
+        throw new UnsupportedOperationException ("task53");
+    }
+    
+    /**
+     * @return Grouped items by theirs category
+     * @lines 1
+     */
+    public Map <Character, List <Item>> task54 (List <Item> items) {
+        throw new UnsupportedOperationException ("task54");
+    }
+    
+    /**
+     * @return Grouped items by theirs category by theirs barcode
+     * @lines 1
+     */
+    public Map <Character, Map <String, List <Item>>> task55 (List <Item> items) {
+        throw new UnsupportedOperationException ("task55");
     }
     
 }
