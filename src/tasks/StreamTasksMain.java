@@ -1,5 +1,8 @@
 package tasks;
+import java.util.Locale;
+
 import tasks.solution.StreamTasksSolution;
+import tests.StreamTasksTests;
 import tests.TestsRunner;
 
 public class StreamTasksMain {
@@ -9,7 +12,9 @@ public class StreamTasksMain {
     /*******************************/
     
     public static void main (String ... args) {
-        StreamTasks implementation = null;
+        Locale.setDefault (Locale.ENGLISH);
+        
+        StreamTasksTests implementation = null;
         if (args.length > 0 && "validate".equals (args [0])) {            
             implementation = new StreamTasksSolution ();
         } else if (args.length > 0 && "example".equals (args [0])) {

@@ -9,37 +9,28 @@ import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import tasks.StreamTasks;
-
-public class TaskTests <R, O> {
+public class TaskTests {
     
     /*******************************/
     /* DO NOT TOUCH METHODS BELLOW */
     /*******************************/
     
-    private final List <BiConsumer <StreamTasks, BiConsumer <R, O>>> cases = new ArrayList <> ();
-    private final List <Boolean> parallel = new ArrayList <> ();
+    private final List <BiConsumer <StreamTasksTests, StreamTasksTests>> cases = new ArrayList <> ();
+    
+    public TaskTests addCase (BiConsumer <StreamTasksTests, StreamTasksTests> caze) {
+        cases.add (caze);
+        return this;
+    }
     
     public int getCasesNumber () {
         return cases.size ();
     }
     
-    public TaskTests <R, O> add (BiConsumer <StreamTasks, BiConsumer <R, O>> testCase, boolean parallel) {
-        this.parallel.add (parallel);
-        cases.add (testCase);
-        return this;
+    public void runTests (StreamTasksTests implementation, StreamTasksTests reference) {
+        cases.forEach (caze -> caze.accept (implementation, reference));
     }
     
-    public TaskTests <R, O> add (BiConsumer <StreamTasks, BiConsumer <R, O>> testCase) {
-        return add (testCase, false);
-    }
-    
-    public void runCase (int index, StreamTasks implementation) throws AssertionError {
-        cases.get (index).accept (implementation, (output, expected) -> {  
-            findAndRunAssertionMethod (output, expected, parallel.get (index));
-        });
-    }
-    
+    @SuppressWarnings ("unused")
     private static <A, E> void findAndRunAssertionMethod (A actual, E expected, Boolean parallel) throws AssertionError {
         final var aType = actual instanceof IntStream ? IntStream.class 
                         : actual instanceof Stream ? Stream.class 

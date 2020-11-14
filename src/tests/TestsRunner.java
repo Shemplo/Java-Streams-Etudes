@@ -3,20 +3,19 @@ package tests;
 import java.util.Locale;
 import java.util.Optional;
 
-import tasks.StreamTasks;
-
 public class TestsRunner {
     
     /*******************************/
     /* DO NOT TOUCH METHODS BELLOW */
     /*******************************/
     
-    private final StreamTasks implementation;
+    private final StreamTasksTests implementation, reference;
     private final TestsPool testsPool;
     
-    public TestsRunner (StreamTasks implementation, StreamTasks reference) {
-        testsPool = new TestsPool (reference);
+    public TestsRunner (StreamTasksTests implementation, StreamTasksTests reference) {
+        testsPool = new TestsPool (StreamTasksTests.class);
         this.implementation = implementation;
+        this.reference = reference;
     }
     
     public int test () {
@@ -35,7 +34,7 @@ public class TestsRunner {
             TestVerdict verdict = null;
             
             try {
-                runTest (i, implementation);
+                testsPool.runTest (i, implementation, reference);
                 verdict = TestVerdict.ACCEPTED;
             } catch (UnsupportedOperationException uoe) {
                 verdict = TestVerdict.NOT_IMPL;
@@ -48,6 +47,7 @@ public class TestsRunner {
             } catch (Throwable t) {
                 verdict = TestVerdict.RE;
                 throwable = t.getMessage () != null ? t : null;
+                t.printStackTrace ();
             } finally {
                 final var end = System.currentTimeMillis ();
                 
@@ -66,13 +66,6 @@ public class TestsRunner {
         );
         
         return -failed;
-    }
-    
-    private void runTest (int index, StreamTasks impl) throws UnsupportedOperationException, AssertionError {
-        final var tests = testsPool.getTaskTests (index);
-        for (int i = 0; i < tests.getCasesNumber (); i++) {
-            tests.runCase (i, impl);
-        }
     }
     
 }
