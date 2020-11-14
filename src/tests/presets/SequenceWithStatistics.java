@@ -33,4 +33,20 @@ public class SequenceWithStatistics <T> {
         );
     }
     
+    private boolean parallel;
+    
+    public SequenceWithStatistics <?> markParallelStream () {
+        parallel = true;
+        return this;
+    }
+    
+    public SequenceWithStatistics <?> setParallelStream (boolean parallel) {
+        this.parallel = parallel;
+        return this;
+    }
+    
+    public boolean isParallelStream () {
+        return parallel;
+    }
+    
 }

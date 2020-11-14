@@ -13,4 +13,6 @@ public @interface TestResult {
     
     Class <?> wrap () default Void.class;
     
+    boolean parallel () default false;
+    
 }

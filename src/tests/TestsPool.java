@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tests.presets.ConstantWithDescription;
@@ -25,6 +27,7 @@ import tests.presets.SequenceWithStatistics;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestResult;
 
 public class TestsPool {
     
@@ -45,6 +48,7 @@ public class TestsPool {
     }
     
     private List <TaskTests> loadTests (Class <?> solution) {
+        System.out.println ("Loading tests...");
         final var tests = new ArrayList <TaskTests> ();
         final var random = new Random (1L);
         
@@ -56,16 +60,17 @@ public class TestsPool {
         Arrays.stream (solution.getDeclaredMethods ())
             . filter (isPublic.and (isStatic.negate ()).and (isAbs).and (isTest))
             . sorted (Comparator.comparingInt (Test.GET_ORDER))
-            . peek (System.out::println)
             . map (method -> prepareTestsForMethod (method, random))
             . forEach (tests::add);
         
+        System.out.printf ("%n%d tests loaded%n%n", tests.size ());
         return tests;
     }
     
     private TaskTests prepareTestsForMethod (Method method, Random random) {
         final var tests = new TaskTests ();
         
+        final var result = method.getAnnotation (TestResult.class);
         final var parameters = method.getParameters ();
         
         final var inputs = Arrays.stream (parameters)
@@ -89,7 +94,7 @@ public class TestsPool {
                 paramInput [j] = inp.get (i % inp.size ());
             }
             
-            tests.addCase (prepareCheckingConsumer (method, paramInput, random));
+            tests.addCase (prepareCheckingConsumer (method, paramInput, random, result));
         }
         
         return tests;
@@ -111,6 +116,8 @@ public class TestsPool {
         Parameter parameter, TestInputCollection annotation, Random random
     ) {
         final var inputsCollector = new ArrayList <SequenceWithStatistics <?>> ();
+        final var parallel = annotation.parallel ();
+        
         for (final var presetType : annotation.presets ()) {
             final var preset = presets.computeIfAbsent (presetType, type -> {
                 try {
@@ -132,13 +139,15 @@ public class TestsPool {
             
             for (final var constantInput : annotation.constant ()) {
                 final var length = constantInput + random.nextInt (varation);
-                inputsCollector.add (preset.getRandomSequence (length, random, unique));
+                inputsCollector.add (preset.getRandomSequence (length, random, unique)
+                    .setParallelStream (parallel));
             }
             
             for (final var percentageInput : annotation.percentage ()) {
                 final var percent = percentageInput + random.nextInt (varation) / 100.0;
                 final var length = (int) Math.round (percent * preset.getSize ());
-                inputsCollector.add (preset.getRandomSequence (length, random, unique));
+                inputsCollector.add (preset.getRandomSequence (length, random, unique)
+                    .setParallelStream (parallel));
             }
         }
         
@@ -164,14 +173,36 @@ public class TestsPool {
     }
     
     private BiConsumer <StreamTasksTests, StreamTasksTests> prepareCheckingConsumer (
-        Method method, Object [] paramInput, Random random
+        Method method, Object [] paramInput, Random random, TestResult result
     ) {
         return (implementation, reference) -> {
             final var seed = random.nextLong ();
             
             final var resultImpl = prepareAndInvokeImplementation (implementation, method, paramInput, seed);
             final var resultRef = prepareAndInvokeImplementation (reference, method, paramInput, seed);
-            System.out.println ("Result: " + resultImpl + " ? " + resultRef); // SYSOUT
+            
+            final var wrapper = result.wrap ();
+            var resultWrapRef = resultRef;
+            
+            if (wrapper == List.class) {
+                if (resultRef instanceof Collection) {                    
+                    resultWrapRef = List.copyOf ((Collection <?>) resultRef);
+                } else if (resultRef instanceof Stream) {
+                    resultWrapRef = ((Stream <?>) resultRef).collect (Collectors.toList ());
+                } else {
+                    resultWrapRef = List.of (resultRef);
+                }
+            } else if (wrapper == Set.class) {
+                if (resultRef instanceof Collection) {                    
+                    resultWrapRef = Set.copyOf ((Collection <?>) resultRef);
+                } else if (resultRef instanceof Stream) {
+                    resultWrapRef = ((Stream <?>) resultRef).collect (Collectors.toSet ());
+                } else {
+                    resultWrapRef = Set.of (resultRef);
+                }
+            }
+            
+            compareAnswers (resultImpl, resultWrapRef, result.parallel ());
         };
     }
     
@@ -203,7 +234,8 @@ public class TestsPool {
                 }
             } else if (parameters [i].getType () == Stream.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    input [i] = ((SequenceWithStatistics <?>) paramInput [i]).data.stream ();
+                    final var sws = (SequenceWithStatistics <?>) paramInput [i];
+                    input [i] = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
                 } else {
                     throw new IllegalArgumentException (String.format (
                         "In method `%s` parameter #%d should be annotated with @TestInputCollection",
@@ -248,6 +280,39 @@ public class TestsPool {
             return method.invoke (implementation, input);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException (e);
+        }
+    }
+    
+    private void compareAnswers (Object implementation, Object reference, boolean parallel) {
+        final var iType = implementation instanceof IntStream ? IntStream.class
+                        : implementation instanceof Stream ? Stream.class
+                        : implementation instanceof Integer ? Integer.class
+                        : implementation instanceof List ? List.class
+                        : implementation instanceof Map ? Map.class 
+                        : implementation instanceof Set ? Set.class : null;
+        final var rType = reference instanceof IntStream ? IntStream.class
+                        : reference instanceof Stream ? Stream.class
+                        : reference instanceof Integer ? Integer.class
+                        : reference instanceof List ? List.class
+                        : reference instanceof Map ? Map.class
+                        : reference instanceof Set ? Set.class : null;
+        try {
+            if (iType == IntStream.class || iType == Stream.class) {
+                OutputAssertions.class.getMethod ("assertOutput", iType, boolean.class, rType)
+                    .invoke (null, implementation, parallel, reference);
+            } else {
+                OutputAssertions.class.getMethod ("assertOutput", iType, rType)
+                    .invoke (null, implementation, reference);
+            }
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException re) {
+            re.printStackTrace ();
+            throw new IllegalStateException ("Failed to check results");
+        } catch (InvocationTargetException ite) {
+            if (ite.getCause () instanceof AssertionError) {
+                throw (AssertionError) ite.getCause ();
+            }
+            
+            throw new AssertionError ("Failed to check results");
         }
     }
     

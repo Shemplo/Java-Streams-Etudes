@@ -44,8 +44,6 @@ public interface DataPreset <T> {
                  . mapToObj (data::get).collect (Collectors.toUnmodifiableList ());
         }
         
-        System.out.println ("Seq for " + length + ", " + unique + ": " + sequence); // SYSOUT
-        
         if (doesSupportStatistics () && !sequence.isEmpty ()) {
             final var conv = getStatisticsConverter ();
             

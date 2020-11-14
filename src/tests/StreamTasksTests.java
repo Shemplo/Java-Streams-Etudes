@@ -13,7 +13,7 @@ import tests.utils.TestResult;
 public abstract class StreamTasksTests {
     
     @Test (order = 1)
-    @TestResult (wrap = Void.class)
+    @TestResult (wrap = List.class)
     public abstract Set <String> task1 (
         @TestInputCollection (presets = {Names.class}, constant = {1, 5}, variation = 5)
         List <String> names
@@ -54,6 +54,15 @@ public abstract class StreamTasksTests {
     public abstract List <String> task6 (
         @TestInputCollection (presets = {Names.class}, percentage = {1.01, 1.05, 2.1})
         Stream <String> names
+    );
+    
+    @Test (order = 6)
+    @TestResult (wrap = List.class)
+    public abstract Stream <String> task7 (
+        @TestInputCollection (presets = {Names.class}, percentage = {1.01, 1.05, 2.1})
+        Stream <String> names,
+        @TestInputCollection (presets = {Names.class}, percentage = {0.33, 0.45})
+        Stream <String> names2
     );
     
 }
