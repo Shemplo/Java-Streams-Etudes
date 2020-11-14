@@ -44,6 +44,7 @@ public class TestsRunner {
             } catch (NullPointerException npe) {
                 verdict = TestVerdict.NPE;
                 throwable = npe.getMessage () != null ? npe : null;
+                npe.printStackTrace ();
             } catch (Throwable t) {
                 verdict = TestVerdict.RE;
                 throwable = t.getMessage () != null ? t : null;

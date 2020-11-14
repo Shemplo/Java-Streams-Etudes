@@ -1,6 +1,7 @@
 package tasks.solution;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,6 +63,33 @@ public class StreamTasksSolution extends StreamTasksTests {
     @Override
     public List <Integer> task11 () {
         return List.of (0, 1, 2, 3, 4, 6);
+    }
+    
+    @Override
+    public List <String> task12 (Stream <String> names, Predicate <String> condition) {
+        return names.filter (condition).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public Predicate <String> task13 () {
+        return s -> s.length () > 4;
+    }
+    
+    @Override
+    public int task14 (int a) {
+        //System.out.println ("T14: " + a); // SYSOUT
+        return a;
+    }
+    
+    @Override
+    public int task15 (int a, int b) {
+        //System.out.println ("T15: " + a + ", " + b); // SYSOUT
+        return a + b + 8;
+    }
+    
+    @Override
+    public int task16 () {
+        return 76;
     }
     
 }

@@ -2,6 +2,7 @@ package tests;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import tests.presets.Names;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
 import tests.utils.TestResult;
 
@@ -98,5 +100,40 @@ public abstract class StreamTasksTests {
     @Test (order = 1)
     @TestResult (wrap = Void.class)
     public abstract List <Integer> task11 ();
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class)
+    public abstract List <String> task12 (
+        @TestInputCollection (presets = {Names.class}, percentage = {0.91, 1.05, 1.51})
+        Stream <String> names, 
+        @TestInputPredicate (indices = {0})
+        Predicate <String> condition
+    );
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class, checkBy = 11, repeat = 2)
+    public abstract Predicate <String> task13 ();
+    
+    
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class)
+    public abstract int task14 (
+        @TestInputConstant (constant = {43})
+        int a
+    );
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class, checkBy = 13, repeat = 7)
+    public abstract int task15 (
+        @TestInputConstant (constant = {2, 5, 6})
+        int a, 
+        @TestInputConstant (constant = {1})
+        int b
+    );
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class, checkBy = 14, repeat = 2)
+    public abstract int task16 ();
     
 }

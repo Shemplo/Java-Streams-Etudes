@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Target (PARAMETER)
 @Retention (RUNTIME)
-public @interface TestInputFunction {
+public @interface TestInputPredicate {
     
-    int index ();
+    int [] indices ();
     
 }

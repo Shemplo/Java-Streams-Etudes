@@ -1,5 +1,6 @@
 package tests.presets;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -7,8 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,19 +18,64 @@ import java.util.stream.Stream;
 
 import tests.OutputAssertions;
 import tests.StreamTasksTests;
+import tests.TaskTests;
+import tests.TestsPool;
+import tests.utils.TestInputCollection;
+import tests.utils.TestInputConstant;
+import tests.utils.TestInputPredicate;
+import tests.utils.TestInputSupplier;
 import tests.utils.TestResult;
 
 public class TestInvokerGenerator {
     
-    public BiConsumer <StreamTasksTests, StreamTasksTests> prepareInvoker (
-        Method method, Object [] paramInput, Random random, TestResult result
+    public BiFunction <StreamTasksTests, StreamTasksTests, Object> prepareInvoker (
+        Method method, Object [] paramInput, Random random, TestResult result, 
+        TestsPool pool, List <TaskTests> prepared
+    ) {
+        return (implementation, reference) -> {
+            // final var seed = random.nextLong ();
+            //final var resultImpl = prepareAndInvokeImplementation (implementation, method, paramInput, seed);
+            //final var resultRef = prepareAndInvokeImplementation (reference, method, paramInput, seed);
+            //compareAnswers (resultImpl, wrapResult (result.wrap (), resultRef), result.parallel ());
+            
+            final var seed = random.nextLong ();
+            
+            final var resultImpl = prepareSingleInvoker (
+                method, paramInput, new Random (seed), result, pool, prepared, true
+            ).apply (implementation, reference);
+            
+            final var resultRef = prepareSingleInvoker (
+                method, paramInput, new Random (seed), result, pool, prepared, false
+            ).apply (implementation, reference);
+            
+            final var wrappedRef = wrapResult (result.wrap (), resultRef);
+            compareAnswers (resultImpl, wrappedRef, result.parallel ());
+            return null;
+        };
+    }
+    
+    public BiFunction <StreamTasksTests, StreamTasksTests, Object> prepareSingleInvoker (
+        Method method, Object [] paramInput, Random random, TestResult result, 
+        TestsPool pool, List <TaskTests> prepared, boolean forImplementation
     ) {
         return (implementation, reference) -> {
             final var seed = random.nextLong ();
             
-            final var resultImpl = prepareAndInvokeImplementation (implementation, method, paramInput, seed);
-            final var resultRef = prepareAndInvokeImplementation (reference, method, paramInput, seed);
-            compareAnswers (resultImpl, wrapResult (result.wrap (), resultRef), result.parallel ());
+            if (result.checkBy () == -1) {                
+                return prepareAndInvokeImplementation (reference, method, paramInput, seed);
+            } else {
+                final var instance = forImplementation ? implementation : reference;
+                final var value = prepareAndInvokeImplementation (
+                    instance, method, paramInput, seed
+                );
+                
+                if (value == null) {
+                    throw new IllegalArgumentException ("You implementation should not return NULL as answer");
+                }
+                
+                return pool.prepareTestsForMethod (null, random, prepared, result.checkBy (), value, forImplementation)
+                     . runTests (implementation, reference);
+            }
         };
     }
     
@@ -56,6 +103,10 @@ public class TestInvokerGenerator {
         return resultWrapRef;
     }
     
+    private final Set <Class <?>> acceptablePrimitives = Set.of (
+        int.class, double.class, Integer.class, Double.class
+    );
+    
     private Object prepareAndInvokeImplementation (
         StreamTasksTests implementation, Method method, Object [] paramInput, long randomSeed
     ) {
@@ -68,29 +119,20 @@ public class TestInvokerGenerator {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     input [i] = ((SequenceWithStatistics <?>) paramInput [i]).data;
                 } else {
-                    throw new IllegalArgumentException (String.format (
-                        "In method `%s` parameter #%d should be annotated with @TestInputCollection",
-                        method.getName (), i
-                    ));
+                    requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Set.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     input [i] = Set.copyOf (((SequenceWithStatistics <?>) paramInput [i]).data);
                 } else {
-                    throw new IllegalArgumentException (String.format (
-                        "In method `%s` parameter #%d should be annotated with @TestInputCollection",
-                        method.getName (), i
-                    ));
+                    requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Stream.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     final var sws = (SequenceWithStatistics <?>) paramInput [i];
                     input [i] = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
                 } else {
-                    throw new IllegalArgumentException (String.format (
-                        "In method `%s` parameter #%d should be annotated with @TestInputCollection",
-                        method.getName (), i
-                    ));
+                    requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Supplier.class) {
                 if (paramInput [i] instanceof Function) {
@@ -98,10 +140,13 @@ public class TestInvokerGenerator {
                     final var supplier = (Function <Random, Supplier <?>>) paramInput [i];
                     input [i] = supplier.apply (random);
                 } else {
-                    throw new IllegalArgumentException (String.format (
-                        "In method `%s` parameter #%d should be annotated with @TestInputSupplier",
-                        method.getName (), i
-                    ));
+                    requestAnnotation (method, i, TestInputSupplier.class);
+                }
+            } else if (parameters [i].getType () == Predicate.class) {
+                if (paramInput [i] instanceof Predicate) {
+                    input [i] = paramInput [i];
+                } else {
+                    requestAnnotation (method, i, TestInputPredicate.class);
                 }
             } else if (parameters [i].getType () == int.class || parameters [i].getType () == double.class) {
                 if (paramInput [i] instanceof ConstantWithDescription) {
@@ -128,11 +173,10 @@ public class TestInvokerGenerator {
                             input [i] = cwd.getValue (null, random);
                         }
                     }
+                } else if (acceptablePrimitives.contains (paramInput [i].getClass ())) {
+                    input [i] = paramInput [i];
                 } else {
-                    throw new IllegalArgumentException (String.format (
-                        "In method `%s` parameter #%d should be annotated with @TestInputConstant",
-                        method.getName (), i
-                    ));
+                    requestAnnotation (method, i, TestInputConstant.class);
                 }
             }
         }
@@ -142,6 +186,13 @@ public class TestInvokerGenerator {
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException (e);
         }
+    }
+    
+    private void requestAnnotation (Method method, int parameterIndex, Class <? extends Annotation> annotation) {
+        throw new IllegalArgumentException (String.format (
+            "In method `%s` parameter #%d should be annotated with @%s",
+            method.getName (), parameterIndex, annotation.getSimpleName ()
+        ));
     }
     
     private void compareAnswers (Object implementation, Object reference, boolean parallel) {
@@ -157,6 +208,10 @@ public class TestInvokerGenerator {
                         : reference instanceof List ? List.class
                         : reference instanceof Map ? Map.class
                         : reference instanceof Set ? Set.class : null;
+        if (iType == null || rType == null) {
+            System.err.println (implementation + " | " + reference);
+        }
+        
         try {
             if (iType == IntStream.class || iType == Stream.class) {
                 OutputAssertions.class.getMethod ("assertOutput", iType, boolean.class, rType)

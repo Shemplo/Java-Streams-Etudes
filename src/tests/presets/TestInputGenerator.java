@@ -10,15 +10,26 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
 
 public class TestInputGenerator {
     
     private final Map <Class <? extends DataPreset <?>>, DataPreset <?>> presets = new HashMap <> ();
+    
+    @SuppressWarnings ("unused")
+    private final List <Function <?, ?>> functions = List.of (
+        (String s) -> s.concat ("Solk")
+    );
+    
+    private final List <Predicate <?>> predicates = List.of (
+        (String s) -> s.toLowerCase ().contains ("a")
+    );
     
     public List <?> prepareInputDataForParameter (Parameter parameter, Random random) {
         if (parameter.isAnnotationPresent (TestInputCollection.class)) {
@@ -30,6 +41,9 @@ public class TestInputGenerator {
         } else if (parameter.isAnnotationPresent (TestInputSupplier.class)) {
             final var annotation = parameter.getAnnotation (TestInputSupplier.class);
             return prepareSupplierInputForParameter (parameter, annotation, random);
+        } else if (parameter.isAnnotationPresent (TestInputPredicate.class)) {
+            final var annotation = parameter.getAnnotation (TestInputPredicate.class);
+            return preparePredicateInputForParameter (parameter, annotation, random);
         }
         
         return List.of ();
@@ -118,6 +132,17 @@ public class TestInputGenerator {
                     inputCollector.add (R -> () -> data.get (R.nextInt (data.size ())));
                 }
             }
+        }
+        
+        return inputCollector;
+    }
+    
+    private List <Predicate <?>> preparePredicateInputForParameter (
+        Parameter parameter, TestInputPredicate annotation, Random random
+    ) {
+        final var inputCollector = new ArrayList <Predicate <?>> ();
+        for (final var index : annotation.indices ()) {
+            inputCollector.add (predicates.get (index));
         }
         
         return inputCollector;
