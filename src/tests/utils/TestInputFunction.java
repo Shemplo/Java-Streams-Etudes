@@ -11,8 +11,6 @@ import java.lang.annotation.Target;
 @Retention (RUNTIME)
 public @interface TestInputFunction {
     
-    int functionIndex () default -1;
-    
-    int predicateIndex () default -1;
+    int index () default -1;
     
 }

@@ -1,6 +1,7 @@
 package tasks.solution;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +42,26 @@ public class StreamTasksSolution extends StreamTasksTests {
     @Override
     public Stream <String> task7 (Stream <String> names, Stream <String> names2) {
         return Stream.concat (names, names2);
+    }
+    
+    @Override
+    public Stream <String> task8 (Stream <String> names, Stream <String> names2, int limit) {
+        return task7 (names, names2).limit (limit);
+    }
+    
+    @Override
+    public <T> List <T> task9 (Stream <T> values) {
+        return values.collect (Collectors.toList ());
+    }
+    
+    @Override
+    public <T> List <T> task10 (Supplier <T> generator, int limit) {
+        return Stream.generate (generator).limit (limit).collect (Collectors.toList ());
+    }
+    
+    @Override
+    public List <Integer> task11 () {
+        return List.of (0, 1, 2, 3, 4, 6);
     }
     
 }
