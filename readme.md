@@ -6,28 +6,32 @@
 
 Do you know how to use Java Stream API?
 
-* If **YES** then you can have a practice here to check your skills 
 * If **NO** but you are interested in it then you can use this project as a roadmap of things to learn
+* If **YES** then you can have a practice here to check your skills 
 
-You will need to implement some methods with described logic using knowledge of 
-_streams_, _lambdas_, _method handlers_ and other functional Java things.
+Apply you knowledge of _streams_, _lambdas_, _method handlers_ and other functional Java things.
 
 There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
-> **2** tasks are now available for implementation
+> **10** tasks are available now
 
 ### What to do
 
-0. Clone this repository to your computer.
+> Clone repository → implement methods → run tests → fix mistakes
 
-1. Implement methods that are declared and stubbed in class `tasks.StreamTasks` in `src` folder.
-2. Run tests as it is described bellow.
+Methods to implement are placed in class `tasks.StreamTasks` in `src` folder. 
+Initially they are stubbed with `UnsupportedOperationException` (and tests know about that). 
+You need to replace such lines with solution consists of stream flow or something related to it.
+
+It's **prohibited** to use standard cycles (`for`, `while`, recursion) or conditions (`if`, `if-else`, ...) 
+out of stream operations because all tasks are formulated so that they can be solved in functional approach. 
+One **possible exclusion** from pure functional paradigm is declaring and usage of local variables.
 
 ### Running tests
 
-Due to this project is orientated for beginners **no dependent libraries** are required.
+Due to this project is orientated to beginners **no dependent libraries** are required.
 
-* You need just a **JVM of 11 version (or higher)**.
+> Main requirement is **JVM of 11 version (or higher)**
 
 Run main method from `tasks.StreamTasksMain` class in your preferred IDE or run a script file `test.(cmd|sh)`.
 
@@ -51,7 +55,6 @@ Until you solved all tasks with verdict `accepted` the program will finish with 
 
 You can run check program with argument `example`. 
 For that add `example` word to passing arguments in IDE or to the end of running scripts:
-
 `test.cmd example` (for Windows) and `./test.sh example` (for Unix)
 
 There are some implemented tasks in class `tasks.StreamTasksExample`, so they would be tested in `example` mode.
@@ -66,8 +69,8 @@ Try to avoid this action :)
 
 #### Challenges
 
-You can also use this repository for different challenges. 
+You can also use tasks from this project for different challenges. 
 For example, you can check how many tasks you can do in **limited time** 
-or how many tasks you can do with **single run** of tests (on the first attempt), ...
+or how much time you will need to **solve them all**, etc.
 
 ##### Good luck, have <s>fun</s> progress!
