@@ -9,6 +9,8 @@ import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import tests.inputs.SequenceWithStatistics;
+
 public interface DataPreset <T> {
     
     void initialize (Random r);

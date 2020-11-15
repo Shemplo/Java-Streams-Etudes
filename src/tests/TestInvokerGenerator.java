@@ -1,14 +1,19 @@
-package tests.presets;
+package tests;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.StringJoiner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -16,12 +21,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import tests.OutputAssertions;
-import tests.StreamTasksTests;
-import tests.TaskTests;
-import tests.TestsPool;
+import tests.inputs.ConstantValueProvider;
+import tests.inputs.ConsumerGenerator;
+import tests.inputs.SequenceWithStatistics;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputConsumer;
 import tests.utils.TestInputFunction;
 import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
@@ -29,7 +34,7 @@ import tests.utils.TestResult;
 
 public class TestInvokerGenerator {
     
-    public BiFunction <StreamTasksTests, StreamTasksTests, Object> prepareInvoker (
+    public BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult> prepareInvoker (
         Method method, Object [] paramInput, Random random, TestResult result, 
         TestsPool pool, List <TaskTests> prepared
     ) {
@@ -44,13 +49,29 @@ public class TestInvokerGenerator {
                 method, paramInput, new Random (seed), result, pool, prepared, false
             ).apply (implementation, reference);
             
-            final var wrappedRef = wrapResult (result.wrap (), resultRef);
-            compareAnswers (resultImpl, wrappedRef, result.parallel ());
-            return null;
+            final var wrappedRef = wrapResult (result.wrap (), resultRef.result);
+            if (method.getReturnType () != Void.class && method.getReturnType () != void.class
+                    && (resultImpl.result != null && wrappedRef != null)) {
+                compareAnswers (resultImpl.result, wrappedRef, result.parallel ());
+            }
+            
+            final var consumersImpt = resultImpl.getConsumers ();
+            final var consumersRef = resultRef.getConsumers ();
+            
+            assert consumersImpt.size () == consumersRef.size () : String.format (
+                "Number of consumer values are different: %d and %d",
+                consumersImpt.size (), consumersRef.size ()
+            );
+            
+            for (int i = 0; i < consumersRef.size (); i++) {
+                compareConsumerAnswers (i, consumersImpt.get (i), consumersRef.get (i));
+            }
+            
+            return resultImpl;
         };
     }
     
-    public BiFunction <StreamTasksTests, StreamTasksTests, Object> prepareSingleInvoker (
+    public BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult> prepareSingleInvoker (
         Method method, Object [] paramInput, Random random, TestResult result, 
         TestsPool pool, List <TaskTests> prepared, boolean forImplementation
     ) {
@@ -61,16 +82,15 @@ public class TestInvokerGenerator {
                 return prepareAndInvokeImplementation (reference, method, paramInput, seed);
             } else {
                 final var instance = forImplementation ? implementation : reference;
-                final var value = prepareAndInvokeImplementation (
-                    instance, method, paramInput, seed
-                );
+                final var value = prepareAndInvokeImplementation (instance, method, paramInput, seed);
                 
-                if (value == null) {
+                if (value.result == null) {
                     throw new IllegalArgumentException ("You implementation should not return NULL as answer");
                 }
                 
-                return pool.prepareTestsForMethod (null, random, prepared, result.checkBy (), value, forImplementation)
-                     . runTests (implementation, reference);
+                return pool.prepareTestsForMethod (
+                    null, random, prepared, result.checkBy (), value.result, forImplementation
+                ).runTests (implementation, reference).addAnotherResult (value);
             }
         };
     }
@@ -103,10 +123,11 @@ public class TestInvokerGenerator {
         int.class, double.class, Integer.class, Double.class
     );
     
-    private Object prepareAndInvokeImplementation (
+    private InvocationResult prepareAndInvokeImplementation (
         StreamTasksTests implementation, Method method, Object [] paramInput, long randomSeed
     ) {
         Object [] input = new Object [paramInput.length];
+        final var consumersValues = new ArrayList <> ();
         final var parameters = method.getParameters ();
         final var random = new Random (randomSeed);
         
@@ -114,6 +135,8 @@ public class TestInvokerGenerator {
             if (parameters [i].getType () == List.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     input [i] = ((SequenceWithStatistics <?>) paramInput [i]).data;
+                } else if (paramInput [i] instanceof List) {
+                    input [i] = paramInput [i];
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }
@@ -150,9 +173,17 @@ public class TestInvokerGenerator {
                 } else {
                     requestAnnotation (method, i, TestInputFunction.class);
                 }
+            } else if (parameters [i].getType () == Consumer.class) {
+                if (paramInput [i] instanceof ConsumerGenerator) {
+                    final var consumerNresult = ((ConsumerGenerator <?>) paramInput [i]).get ();
+                    consumersValues.add (consumerNresult.S);
+                    input [i] = consumerNresult.F;
+                } else {
+                    requestAnnotation (method, i, TestInputConsumer.class);
+                }
             } else if (parameters [i].getType () == int.class || parameters [i].getType () == double.class) {
-                if (paramInput [i] instanceof ConstantWithDescription) {
-                    final var cwd = (ConstantWithDescription) paramInput [i];
+                if (paramInput [i] instanceof ConstantValueProvider) {
+                    final var cwd = (ConstantValueProvider) paramInput [i];
                     if (cwd.sequenceSrc != null) {
                         if (paramInput [cwd.sequenceSrc] instanceof SequenceWithStatistics) {
                             final var sws = (SequenceWithStatistics <?>) paramInput [cwd.sequenceSrc];
@@ -184,7 +215,11 @@ public class TestInvokerGenerator {
         }
         
         try {
-            return method.invoke (implementation, input);
+            final var start = System.currentTimeMillis ();
+            final var result = method.invoke (implementation, input);
+            final var runtime = System.currentTimeMillis () - start;
+            
+            return new InvocationResult (result, runtime, consumersValues);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException (e);
         }
@@ -211,7 +246,10 @@ public class TestInvokerGenerator {
                         : reference instanceof Map ? Map.class
                         : reference instanceof Set ? Set.class : null;
         if (iType == null || rType == null) {
-            System.err.println (implementation + " | " + reference);
+            throw new IllegalArgumentException (String.format (
+                "Can't detect assertion types for values: `%s` and `%s`%n", 
+                implementation, reference
+            ));
         }
         
         try {
@@ -231,6 +269,30 @@ public class TestInvokerGenerator {
             }
             
             throw new AssertionError ("Failed to check results");
+        }
+    }
+    
+    private void compareConsumerAnswers (int index, Object implementation, Object reference) {
+        assert implementation.getClass () == reference.getClass () : String.format (
+            "Consumer values should have same type: %s and %s (comparing pair #d)",
+            implementation.getClass (), reference.getClass (), index
+        );
+        
+        if (reference instanceof List) {
+            compareAnswers (implementation, reference, false);
+        } else if (reference instanceof AtomicInteger) {
+            final var sumImpl = ((AtomicInteger) implementation).get ();
+            final var sumRef = ((AtomicInteger) reference).get ();
+            
+            compareAnswers (sumImpl, sumRef, false);
+        } else if (reference instanceof StringJoiner) {
+            final var strImpl = ((StringJoiner) implementation).toString ();
+            final var strRef = ((StringJoiner) reference).toString ();
+            
+            assert Objects.equals (strImpl, strRef) : String.format (
+                "String `%s` was expected (actual given: %s)",
+                strImpl, strRef
+            );
         }
     }
     

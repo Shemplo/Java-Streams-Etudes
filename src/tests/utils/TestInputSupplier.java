@@ -6,8 +6,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import tests.inputs.SupplierMode;
 import tests.presets.DataPreset;
-import tests.presets.SupplierMode;
 
 
 @Target (PARAMETER)

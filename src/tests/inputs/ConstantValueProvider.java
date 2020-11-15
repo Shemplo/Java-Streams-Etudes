@@ -1,8 +1,8 @@
-package tests.presets;
+package tests.inputs;
 
 import java.util.Random;
 
-public class ConstantWithDescription {
+public class ConstantValueProvider {
     
     public final Double value;
     public final int variation;
@@ -10,12 +10,12 @@ public class ConstantWithDescription {
     public final Integer sequenceSrc;
     public final Integer sequenceParameter;
     
-    public ConstantWithDescription (double value, int variation) {
+    public ConstantValueProvider (double value, int variation) {
         this.sequenceSrc = null; this.sequenceParameter = null;
         this.value = value; this.variation = variation;
     }
     
-    public ConstantWithDescription (int sequenceSrc, int sequenceParameter, int variation) {
+    public ConstantValueProvider (int sequenceSrc, int sequenceParameter, int variation) {
         this.sequenceParameter = sequenceParameter;
         this.sequenceSrc = sequenceSrc; 
         this.variation = variation;

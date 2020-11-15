@@ -1,4 +1,4 @@
-package tests.presets;
+package tests;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
@@ -13,8 +13,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import tests.inputs.ConstantValueProvider;
+import tests.inputs.ConsumerGenerator;
+import tests.inputs.SequenceWithStatistics;
+import tests.inputs.SupplierMode;
+import tests.presets.DataPreset;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputConsumer;
 import tests.utils.TestInputFunction;
 import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
@@ -23,9 +29,8 @@ public class TestInputGenerator {
     
     private final Map <Class <? extends DataPreset <?>>, DataPreset <?>> presets = new HashMap <> ();
     
-    @SuppressWarnings ("unused")
     private final List <Function <?, ?>> functions = List.of (
-        (String s) -> s.concat ("Solk"),
+        (String s) -> s.concat (" Solk"),
         (String s) -> Integer.parseInt (s)
     );
     
@@ -49,6 +54,9 @@ public class TestInputGenerator {
         } else if (parameter.isAnnotationPresent (TestInputFunction.class)) {
             final var annotation = parameter.getAnnotation (TestInputFunction.class);
             return prepareFunctionInputForParameter (parameter, annotation, random);
+        } else if (parameter.isAnnotationPresent (TestInputConsumer.class)) {
+            final var annotation = parameter.getAnnotation (TestInputConsumer.class);
+            return prepareConsumerInputForParameter (parameter, annotation, random);
         }
         
         return List.of ();
@@ -83,19 +91,19 @@ public class TestInputGenerator {
         return inputsCollector;
     }
     
-    private List <ConstantWithDescription> prepareConstantInputForParameter (
+    private List <ConstantValueProvider> prepareConstantInputForParameter (
         Parameter parameter, TestInputConstant annotation, Random random
     ) {
-        final var inputCollector = new ArrayList <ConstantWithDescription> ();
+        final var inputCollector = new ArrayList <ConstantValueProvider> ();
         final var variation = annotation.variation ();
         
         for (final var constantInput : annotation.constant ()) {
-            inputCollector.add (new ConstantWithDescription (constantInput, variation));
+            inputCollector.add (new ConstantValueProvider (constantInput, variation));
         }
         
         final var sparam = annotation.parameter ();
         for (final var sequenceInput : annotation.sequence ()) {
-            inputCollector.add (new ConstantWithDescription (sequenceInput, sparam, variation));
+            inputCollector.add (new ConstantValueProvider (sequenceInput, sparam, variation));
         }
         
         return inputCollector;
@@ -162,6 +170,12 @@ public class TestInputGenerator {
         }
         
         return inputCollector;
+    }
+    
+    private List <ConsumerGenerator <?>> prepareConsumerInputForParameter (
+        Parameter parameter, TestInputConsumer annotation, Random random
+    ) {
+        return List.of (new ConsumerGenerator <> (annotation.mode ()));
     }
     
     private DataPreset <?> getPreset (Class <? extends DataPreset <?>> presetType, Random random) {

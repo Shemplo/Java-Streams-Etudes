@@ -19,9 +19,9 @@ public class TaskTests {
         this.method = method; this.inputs = inputs;
     }
     
-    private final List <BiFunction <StreamTasksTests, StreamTasksTests, Object>> cases = new ArrayList <> ();
+    private final List <BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult>> cases = new ArrayList <> ();
     
-    public TaskTests addCase (BiFunction <StreamTasksTests, StreamTasksTests, Object> caze) {
+    public TaskTests addCase (BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult> caze) {
         cases.add (caze);
         return this;
     }
@@ -38,8 +38,8 @@ public class TaskTests {
         return Collections.unmodifiableList (inputs);
     }
     
-    public Object runTests (StreamTasksTests implementation, StreamTasksTests reference) {
-        final var stub = new Object ();
+    public InvocationResult runTests (StreamTasksTests implementation, StreamTasksTests reference) {
+        final var stub = new InvocationResult (null, 0);
         return cases.stream ().map (caze -> caze.apply (implementation, reference))
              . reduce (stub, (a, b) -> a == stub && b != null ? b : a);
     }

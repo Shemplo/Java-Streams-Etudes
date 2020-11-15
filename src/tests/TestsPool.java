@@ -11,8 +11,6 @@ import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import tests.presets.TestInputGenerator;
-import tests.presets.TestInvokerGenerator;
 import tests.utils.Test;
 import tests.utils.TestResult;
 
@@ -141,8 +139,8 @@ public class TestsPool {
         return pool.size ();
     }
     
-    public void runTest (int index, StreamTasksTests implementation, StreamTasksTests reference) {
-        pool.get (index).runTests (implementation, reference);
+    public InvocationResult runTest (int index, StreamTasksTests implementation, StreamTasksTests reference) {
+        return pool.get (index).runTests (implementation, reference);
     }
     
 }

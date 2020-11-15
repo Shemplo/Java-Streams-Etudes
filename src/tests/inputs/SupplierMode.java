@@ -1,4 +1,4 @@
-package tests.presets;
+package tests.inputs;
 
 
 public enum SupplierMode {

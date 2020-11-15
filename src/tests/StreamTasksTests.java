@@ -2,17 +2,20 @@ package tests;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import tests.inputs.ConsumerMode;
 import tests.presets.IntNumbers;
 import tests.presets.Names;
 import tests.presets.StrNumbers;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputConsumer;
 import tests.utils.TestInputFunction;
 import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
@@ -147,6 +150,24 @@ public abstract class StreamTasksTests {
         List <String> values, 
         @TestInputFunction (indices = {1})
         Function <String, Integer> converter
+    );
+    
+    @Test (order = 1)
+    @TestResult (wrap = Void.class)
+    public abstract void task18 (
+        @TestInputCollection (presets = {StrNumbers.class, Names.class}, percentage = {1.04, 1.06})
+        List <String> values, 
+        @TestInputConsumer (mode = ConsumerMode.LIST_COLLECTOR)
+        Consumer <String> collector
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, checkBy = 17)
+    public abstract <T> List <T> task19 (
+        @TestInputCollection (presets = {Names.class}, percentage = {0.91, 1.05, 1.51}, variation = 15)
+        Stream <T> values,
+        @TestInputFunction (indices = {0})
+        Function <T, T> converter
     );
     
 }

@@ -30,11 +30,12 @@ public class TestsRunner {
             System.out.printf ("Test %3d -- ", i + 1);
             
             final var start = System.currentTimeMillis ();
+            long internalRuntime = Long.MAX_VALUE;
             Throwable throwable = null;
             TestVerdict verdict = null;
             
             try {
-                testsPool.runTest (i, implementation, reference);
+                internalRuntime = testsPool.runTest (i, implementation, reference).getRuntime ();
                 verdict = TestVerdict.ACCEPTED;
             } catch (UnsupportedOperationException uoe) {
                 verdict = TestVerdict.NOT_IMPL;
@@ -52,7 +53,8 @@ public class TestsRunner {
             } finally {
                 final var end = System.currentTimeMillis ();
                 
-                System.out.printf ("[%6dms] %-20s%n", end - start, verdict.text);
+                final var runtime = Math.min (end - start, internalRuntime);
+                System.out.printf ("[%6dms] %-20s%n", runtime, verdict.text);
                 Optional.ofNullable (throwable).ifPresent (t -> {
                     System.out.printf ("  %s%n", t.getMessage ());
                 });
