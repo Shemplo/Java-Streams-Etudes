@@ -14,6 +14,14 @@ public class StreamTasksMain {
     public static void main (String ... args) {
         Locale.setDefault (Locale.ENGLISH);
         
+        try {
+            assert false;
+            System.out.println ("JVM flag `-ea` is not enabled");
+            System.exit (1);
+        } catch (AssertionError ae) {
+            // This is necessary to check whether -ea flag is set
+        }
+        
         StreamTasksTests implementation = null;
         if (args.length > 0 && "validate".equals (args [0])) {            
             implementation = new StreamTasksSolution ();

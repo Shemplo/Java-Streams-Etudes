@@ -180,16 +180,16 @@ public class TestInputGenerator {
     }
     
     @SuppressWarnings ("unchecked")
-    private <T> DataPreset <T> getPreset (Class <? extends DataPreset <T>> presetType, Random random) {
-        final var preset = (DataPreset <T>) presets.get (presetType);
+    private DataPreset <?> getPreset (Class <? extends DataPreset <?>> presetType, Random random) {
+        final var preset = presets.get (presetType);
         if (preset != null) { return preset; }
-        
         
         try {
             final var data = presetType.getConstructor ().newInstance ();
             if (DataMappingPreset.class.isAssignableFrom (presetType)) {
-                final var mdata = (DataMappingPreset <T, Object>) data;
-                mdata.initialize (random, getPreset (mdata.getSourcePreset (), random));
+                final var mdata = (DataMappingPreset <?, Object>) data;
+                final var source = (DataPreset <Object>) getPreset (mdata.getSourcePreset (), random);
+                mdata.initialize (random, source);
             } else {
                 data.initialize (random);
             }

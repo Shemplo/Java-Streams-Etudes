@@ -76,12 +76,12 @@ public class TestInvokerGenerator {
         TestsPool pool, List <TaskTests> prepared, boolean forImplementation
     ) {
         return (implementation, reference) -> {
+            final var instance = forImplementation ? implementation : reference;
             final var seed = random.nextLong ();
             
             if (result.checkBy () == -1) {                
-                return prepareAndInvokeImplementation (reference, method, paramInput, seed);
+                return prepareAndInvokeImplementation (instance, method, paramInput, seed);
             } else {
-                final var instance = forImplementation ? implementation : reference;
                 final var value = prepareAndInvokeImplementation (instance, method, paramInput, seed);
                 
                 if (value.result == null) {
@@ -220,8 +220,14 @@ public class TestInvokerGenerator {
             final var runtime = System.currentTimeMillis () - start;
             
             return new InvocationResult (result, runtime, consumersValues);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new RuntimeException (e);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ite) {
+            if (ite.getCause () instanceof UnsupportedOperationException) {
+                throw (UnsupportedOperationException) ite.getCause ();
+            } else if (ite.getCause () instanceof AssertionError) {
+                throw (AssertionError) ite.getCause ();
+            }
+            
+            throw new AssertionError ("Failed to check results");
         }
     }
     
