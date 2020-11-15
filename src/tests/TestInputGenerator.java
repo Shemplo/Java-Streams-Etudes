@@ -17,6 +17,7 @@ import tests.inputs.ConstantValueProvider;
 import tests.inputs.ConsumerGenerator;
 import tests.inputs.SequenceWithStatistics;
 import tests.inputs.SupplierMode;
+import tests.presets.DataMappingPreset;
 import tests.presets.DataPreset;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
@@ -178,21 +179,31 @@ public class TestInputGenerator {
         return List.of (new ConsumerGenerator <> (annotation.mode ()));
     }
     
-    private DataPreset <?> getPreset (Class <? extends DataPreset <?>> presetType, Random random) {
-        return presets.computeIfAbsent (presetType, type -> {
-            try {
-                final var data = type.getConstructor ().newInstance ();
+    @SuppressWarnings ("unchecked")
+    private <T> DataPreset <T> getPreset (Class <? extends DataPreset <T>> presetType, Random random) {
+        final var preset = (DataPreset <T>) presets.get (presetType);
+        if (preset != null) { return preset; }
+        
+        
+        try {
+            final var data = presetType.getConstructor ().newInstance ();
+            if (DataMappingPreset.class.isAssignableFrom (presetType)) {
+                final var mdata = (DataMappingPreset <T, Object>) data;
+                mdata.initialize (random, getPreset (mdata.getSourcePreset (), random));
+            } else {
                 data.initialize (random);
-                return data;
-            } catch (
-                InstantiationException | IllegalAccessException 
-                | IllegalArgumentException | InvocationTargetException 
-                | NoSuchMethodException | SecurityException 
-                e
-            ) {
-                return null;
             }
-        });
+            
+            presets.put (presetType, data);
+            return data;
+        } catch (
+            InstantiationException | IllegalAccessException 
+            | IllegalArgumentException | InvocationTargetException 
+            | NoSuchMethodException | SecurityException 
+            e
+        ) {
+            return null;
+        }
     }
     
 }

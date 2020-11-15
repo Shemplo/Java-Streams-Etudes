@@ -14,6 +14,11 @@ public class Box extends Item {
         return this;
     }
     
+    public Box addItems (List <Item> items) {
+        this.items.addAll (items);
+        return this;
+    }
+    
     public List <Item> getItems () {
         return Collections.unmodifiableList (items);
     }
