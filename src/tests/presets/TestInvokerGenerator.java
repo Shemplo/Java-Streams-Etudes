@@ -22,6 +22,7 @@ import tests.TaskTests;
 import tests.TestsPool;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputFunction;
 import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
 import tests.utils.TestResult;
@@ -33,11 +34,6 @@ public class TestInvokerGenerator {
         TestsPool pool, List <TaskTests> prepared
     ) {
         return (implementation, reference) -> {
-            // final var seed = random.nextLong ();
-            //final var resultImpl = prepareAndInvokeImplementation (implementation, method, paramInput, seed);
-            //final var resultRef = prepareAndInvokeImplementation (reference, method, paramInput, seed);
-            //compareAnswers (resultImpl, wrapResult (result.wrap (), resultRef), result.parallel ());
-            
             final var seed = random.nextLong ();
             
             final var resultImpl = prepareSingleInvoker (
@@ -147,6 +143,12 @@ public class TestInvokerGenerator {
                     input [i] = paramInput [i];
                 } else {
                     requestAnnotation (method, i, TestInputPredicate.class);
+                }
+            } else if (parameters [i].getType () == Function.class) {
+                if (paramInput [i] instanceof Function) {
+                    input [i] = paramInput [i];
+                } else {
+                    requestAnnotation (method, i, TestInputFunction.class);
                 }
             } else if (parameters [i].getType () == int.class || parameters [i].getType () == double.class) {
                 if (paramInput [i] instanceof ConstantWithDescription) {

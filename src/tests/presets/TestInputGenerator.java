@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputFunction;
 import tests.utils.TestInputPredicate;
 import tests.utils.TestInputSupplier;
 
@@ -24,7 +25,8 @@ public class TestInputGenerator {
     
     @SuppressWarnings ("unused")
     private final List <Function <?, ?>> functions = List.of (
-        (String s) -> s.concat ("Solk")
+        (String s) -> s.concat ("Solk"),
+        (String s) -> Integer.parseInt (s)
     );
     
     private final List <Predicate <?>> predicates = List.of (
@@ -44,6 +46,9 @@ public class TestInputGenerator {
         } else if (parameter.isAnnotationPresent (TestInputPredicate.class)) {
             final var annotation = parameter.getAnnotation (TestInputPredicate.class);
             return preparePredicateInputForParameter (parameter, annotation, random);
+        } else if (parameter.isAnnotationPresent (TestInputFunction.class)) {
+            final var annotation = parameter.getAnnotation (TestInputFunction.class);
+            return prepareFunctionInputForParameter (parameter, annotation, random);
         }
         
         return List.of ();
@@ -143,6 +148,17 @@ public class TestInputGenerator {
         final var inputCollector = new ArrayList <Predicate <?>> ();
         for (final var index : annotation.indices ()) {
             inputCollector.add (predicates.get (index));
+        }
+        
+        return inputCollector;
+    }
+    
+    private List <Function <?, ?>> prepareFunctionInputForParameter (
+        Parameter parameter, TestInputFunction annotation, Random random
+    ) {
+        final var inputCollector = new ArrayList <Function <?, ?>> ();
+        for (final var index : annotation.indices ()) {
+            inputCollector.add (functions.get (index));
         }
         
         return inputCollector;

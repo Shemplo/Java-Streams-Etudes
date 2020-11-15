@@ -1,6 +1,7 @@
 package tasks.solution;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -77,19 +78,22 @@ public class StreamTasksSolution extends StreamTasksTests {
     
     @Override
     public int task14 (int a) {
-        //System.out.println ("T14: " + a); // SYSOUT
         return a;
     }
     
     @Override
     public int task15 (int a, int b) {
-        //System.out.println ("T15: " + a + ", " + b); // SYSOUT
         return a + b + 8;
     }
     
     @Override
     public int task16 () {
         return 76;
+    }
+    
+    @Override
+    public List <Integer> task17 (List <String> values, Function <String, Integer> converter) {
+        return values.stream ().map (converter).collect (Collectors.toList ());
     }
     
 }
