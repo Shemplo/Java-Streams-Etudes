@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tests.presets.HexStrNumbers;
 import tests.presets.IntNumbers;
-import tests.presets.Names;
 import tests.presets.IntStrNumbers;
+import tests.presets.Names;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
@@ -185,6 +186,20 @@ public abstract class StreamTasksTests {
         Stream <Integer> numbers,
         @TestInputConstant (sequence = {0}, parameter = 2)
         int limit
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task21 (
+        @TestInputConstant (constant = {325, 5490, 3921, 53890}, variation = 500)
+        int to
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task22 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.8, 0.9, 1.0}, variation = 10)
+        List <Integer> number
     );
     
 }

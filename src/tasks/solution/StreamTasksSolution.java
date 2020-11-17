@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tests.StreamTasksTests;
@@ -107,6 +108,16 @@ public class StreamTasksSolution extends StreamTasksTests {
     @Override
     public Stream <Integer> task20 (Stream <Integer> numbers, int limit) {
         return numbers.filter (x -> x * x <= limit).sorted ();
+    }
+    
+    @Override
+    public IntStream task21 (int to) {
+        return IntStream.range (0, to + 1);
+    }
+    
+    @Override
+    public IntStream task22 (List <Integer> number) {
+        return IntStream.range (0, number.size ()).map (i -> number.get (i) + i);
     }
     
 }

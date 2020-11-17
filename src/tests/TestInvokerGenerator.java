@@ -103,6 +103,8 @@ public class TestInvokerGenerator {
                 resultWrapRef = List.copyOf ((Collection <?>) result);
             } else if (result instanceof Stream) {
                 resultWrapRef = ((Stream <?>) result).collect (Collectors.toList ());
+            } else if (result instanceof IntStream) {
+                resultWrapRef = ((IntStream) result).mapToObj (i -> i).collect (Collectors.toList ());
             } else {
                 resultWrapRef = List.of (result);
             }
@@ -111,6 +113,8 @@ public class TestInvokerGenerator {
                 resultWrapRef = Set.copyOf ((Collection <?>) result);
             } else if (result instanceof Stream) {
                 resultWrapRef = ((Stream <?>) result).collect (Collectors.toSet ());
+            } else if (result instanceof IntStream) {
+                resultWrapRef = ((IntStream) result).mapToObj (i -> i).collect (Collectors.toSet ());
             } else {
                 resultWrapRef = Set.of (result);
             }
@@ -132,6 +136,8 @@ public class TestInvokerGenerator {
         final var random = new Random (randomSeed);
         
         for (int i = 0; i < parameters.length; i++) {
+            final var isIntStream = parameters [i].getType () == IntStream.class;
+            
             if (parameters [i].getType () == List.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     input [i] = ((SequenceWithStatistics <?>) paramInput [i]).data;
@@ -146,10 +152,15 @@ public class TestInvokerGenerator {
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }
-            } else if (parameters [i].getType () == Stream.class) {
+            } else if (parameters [i].getType () == Stream.class || isIntStream) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
                     final var sws = (SequenceWithStatistics <?>) paramInput [i];
-                    input [i] = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
+                    final var stream = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
+                    if (isIntStream) {
+                        input [i] = stream.mapToInt (num -> (Integer) num);
+                    } else {
+                        input [i] = stream;
+                    }
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }

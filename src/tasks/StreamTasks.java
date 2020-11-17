@@ -1,8 +1,11 @@
 package tasks;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import tests.StreamTasksTests;
@@ -13,6 +16,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return List of given constants [a, b + c - a, c]
+     * @see List#of()
      * @lines 1
      */
     public List <Integer> task1 (int a, int b, int c) {
@@ -21,6 +25,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Set of given constants [a, b, c]
+     * @see Set#of()
      * @lines 1
      */
     public Set <Integer> task2 (int a, int b, int c) {
@@ -29,6 +34,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Set of values from given list
+     * @see Set#copyOf(Collection)
      * @lines 1
      */
     public <T> Set <T> task3 (List <T> values) {
@@ -37,6 +43,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream of values from given list
+     * @see Collection#stream()
      * @lines 1
      */
     public <T> Stream <T> task4 (List <T> values) {
@@ -45,6 +52,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream of values from given set
+     * @see Collection#stream()
      * @lines 1
      */
     public <T> Stream <T> task5 (Set <T> values) {
@@ -53,6 +61,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Number of elements in the stream
+     * @see Stream#count()
      * @lines 1
      */
     public <T> int task6 (Stream <T> values) {
@@ -61,6 +70,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Given stream that is limited by size
+     * @see Stream#limit(long)
      * @lines 1
      */
     public <T> Stream <T> task7 (Stream <T> values, int limit) {
@@ -70,6 +80,7 @@ public class StreamTasks extends StreamTasksTests {
     /**
      * @return Stream that contains last `n` elements of sequence with general `size` size from given stream
      * @example input: [A, B, C, D, E, F, G, H, I, ...], 3, 7 -> output: [E, F, G]
+     * @see Stream#skip(long)
      * @lines 1
      */
     public <T> Stream <T> task8 (Stream <T> values, int n, int size) {
@@ -78,6 +89,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream that contains all values from given streams
+     * @see Stream#concat(Stream, Stream)
      * @lines 1
      */
     public <T> Stream <T> task9 (Stream <T> values1, Stream <T> values2) {
@@ -96,6 +108,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream that contains only values accepted by predicate (condition)
+     * @see Stream#filter(Predicate)
      * @lines 1
      */
     public Stream <Integer> task11 (Stream <Integer> numbers, Predicate <Integer> condition) {
@@ -112,6 +125,8 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Predicate that combine two: `positive` as well and negation of `negative`
+     * @see Predicate#and(Predicate)
+     * @see Predicate#negate()
      * @lines 1
      */
     public Predicate <Integer> task13 (Predicate <Integer> positive, Predicate <Integer> negative) {
@@ -120,6 +135,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream that contains converted values by `converter`
+     * @see Stream#map(Function)
      * @lines 1
      */
     public Stream <Integer> task14 (Stream <Integer> numbers, Function <Integer, Integer> converter) {
@@ -136,6 +152,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Function that convert each element (x) to expression: g (f (x) + 1)
+     * @see Function#compose(Function)
      * @lines 1
      */
     public Function <Integer, Integer> task16 (Function <Integer, Integer> f, Function <Integer, Integer> g) {
@@ -144,6 +161,7 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream of parsed integer numbers from its' string representation
+     * @see Integer#parseInt(String)
      * @lines 1
      */
     public Stream <Integer> task17 (Stream <String> numbers) {
@@ -153,6 +171,7 @@ public class StreamTasks extends StreamTasksTests {
     /**
      * @return Stream of parsed hex integer numbers from its' string representation
      * @hint Hex numbers starts from '0x', don't forget to remove this prefix
+     * @see Integer#parseInt(String, int)
      * @lines 1
      */
     public Stream <Integer> task18 (Stream <String> numbers) {
@@ -161,6 +180,8 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Sorted stream (ascending) of unique numbers
+     * @see Stream#distinct()
+     * @see Stream#sorted()
      * @lines 1
      */
     public Stream <Integer> task19 (Stream <Integer> numbers) {
@@ -172,6 +193,26 @@ public class StreamTasks extends StreamTasksTests {
      * @lines 1
      */
     public Stream <Integer> task20 (Stream <Integer> numbers, int limit) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    // INT STREAMS //
+    
+    /**
+     * @return Stream of integers from segment [0, `to`]
+     * @see IntStream#range(int, int)
+     * @lines 1
+     */
+    public IntStream task21 (int to) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of integer numbers from given list with added index: `numbers` [i] + i
+     * @see IntStream#map(IntUnaryOperator)
+     * @lines 1
+     */
+    public IntStream task22 (List <Integer> numbers) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     

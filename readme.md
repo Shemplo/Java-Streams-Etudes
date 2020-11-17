@@ -13,23 +13,27 @@ Apply you knowledge of _streams_, _lambdas_, _method handlers_ and other functio
 
 There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
-> **16** tasks are available now
+> **> 20** tasks are available now
 
 ### What to do
 
 > Clone repository → implement methods → run tests → fix mistakes
 
 Methods to implement are placed in class `tasks.StreamTasks` in `src` folder. 
-Initially they are stubbed with `UnsupportedOperationException` (and tests know about that). 
-You need to replace such lines with solution consists of stream flow or something related to it.
+Initially they are stubbed with standard `UnsupportedOperationException` (and tests know about that). 
+You need to replace such lines with solution consists of stream flow or something related to it
+(description and hints for each task are provided).
 
-It's **prohibited** to use standard cycles (`for`, `while`, recursion) or conditions (`if`, `if-else`, ...) 
-out of stream operations because all tasks are formulated so that they can be solved in functional approach. 
-One **possible exclusion** from pure functional paradigm is declaring and usage of local variables.
+It's **prohibited** to use standard cycles (`for`, `while`, `do-while`, recursion) at all and 
+conditions (`if`, `if-else`, ...) out of stream operations. The main goal of this project is to 
+teach you how to use functional approach in practice. One **possible exclusion** from pure functional 
+paradigm is declaring and usage of local variables.
 
 ### Running tests
 
 Due to this project is orientated to beginners **no dependent libraries** are required.
+If you know how to add dependencies and really know for what then you can do it manually 
+(but, be pointed, all tasks can be solved using only standard Java library).
 
 > Main requirement is **JVM of 11 version (or higher)**
 
@@ -63,9 +67,11 @@ There are some implemented tasks in class `tasks.StreamTasksExample`, so they wo
 
 #### Solutions
 
-In case you really don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` class.
+In case you don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` 
+class in `src` folder. This class is used as reference solution to check answers, so you can copy-paste code to the
+task and this task will be accepted.
 
-Try to avoid this action :)
+Try to avoid any interaction with solutions until you completed all tasks :)
 
 #### Challenges
 
