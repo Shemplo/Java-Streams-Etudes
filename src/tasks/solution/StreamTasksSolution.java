@@ -89,4 +89,24 @@ public class StreamTasksSolution extends StreamTasksTests {
         return g.compose (x -> f.apply (x) + 1);
     }
     
+    @Override
+    public Stream <Integer> task17 (Stream <String> numbers) {
+        return numbers.map (Integer::parseInt);
+    }
+    
+    @Override
+    public Stream <Integer> task18 (Stream <String> numbers) {
+        return numbers.map (num -> num.substring (2)).map (num -> Integer.parseInt (num, 16));
+    }
+    
+    @Override
+    public Stream <Integer> task19 (Stream <Integer> numbers) {
+        return numbers.distinct ().sorted ();
+    }
+    
+    @Override
+    public Stream <Integer> task20 (Stream <Integer> numbers, int limit) {
+        return numbers.filter (x -> x * x <= limit).sorted ();
+    }
+    
 }

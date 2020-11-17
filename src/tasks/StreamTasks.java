@@ -142,4 +142,37 @@ public class StreamTasks extends StreamTasksTests {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     
+    /**
+     * @return Stream of parsed integer numbers from its' string representation
+     * @lines 1
+     */
+    public Stream <Integer> task17 (Stream <String> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of parsed hex integer numbers from its' string representation
+     * @hint Hex numbers starts from '0x', don't forget to remove this prefix
+     * @lines 1
+     */
+    public Stream <Integer> task18 (Stream <String> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Sorted stream (ascending) of unique numbers
+     * @lines 1
+     */
+    public Stream <Integer> task19 (Stream <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Sorted stream (ascending) of numbers whose square doesn't exceed `limit` (less or equal)
+     * @lines 1
+     */
+    public Stream <Integer> task20 (Stream <Integer> numbers, int limit) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
 }

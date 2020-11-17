@@ -7,9 +7,9 @@ import java.util.Random;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.IntStream;
 
-public class StrNumbers implements DataPreset <String> {
+public class IntStrNumbers implements DataPreset <String> {
 
-    private final List <String> numbers = new ArrayList <> ();
+    protected final List <String> numbers = new ArrayList <> ();
     
     @Override
     public void initialize (Random r) {

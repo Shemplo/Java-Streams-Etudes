@@ -6,9 +6,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import tests.presets.HexStrNumbers;
 import tests.presets.IntNumbers;
 import tests.presets.Names;
-import tests.presets.StrNumbers;
+import tests.presets.IntStrNumbers;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
@@ -85,7 +86,7 @@ public abstract class StreamTasksTests {
     @Test (order = 0)
     @TestResult (repeat = 1, wrap = List.class)
     public abstract <T> Stream <T> task9 (
-        @TestInputCollection (presets = {StrNumbers.class, Names.class}, percentage = {0.7, 0.8, 0.9}, variation = 10)
+        @TestInputCollection (presets = {IntStrNumbers.class, Names.class}, percentage = {0.7, 0.8, 0.9}, variation = 10)
         Stream <T> values1,
         @TestInputCollection (presets = {Names.class}, percentage = {0.1, 0.2, 0.3}, variation = 10)
         Stream <T> values2
@@ -94,11 +95,11 @@ public abstract class StreamTasksTests {
     @Test (order = 1)
     @TestResult (repeat = 1, wrap = List.class)
     public abstract <T> Stream <T> task10 (
-        @TestInputCollection (presets = {StrNumbers.class, Names.class}, percentage = {0.7, 0.8, 0.9}, variation = 10)
+        @TestInputCollection (presets = {IntStrNumbers.class, Names.class}, percentage = {0.7, 0.8, 0.9}, variation = 10)
         Stream <T> values1,
         @TestInputCollection (presets = {Names.class}, percentage = {0.1, 0.2, 0.3}, variation = 10)
         Stream <T> values2,
-        @TestInputCollection (presets = {StrNumbers.class}, percentage = {0.4, 0.5, 0.5}, variation = 10)
+        @TestInputCollection (presets = {IntStrNumbers.class}, percentage = {0.4, 0.5, 0.5}, variation = 10)
         Stream <T> values3
     );
     
@@ -154,6 +155,36 @@ public abstract class StreamTasksTests {
         Function <Integer, Integer> f,
         @TestInputFunction (indices = {3})
         Function <Integer, Integer> g
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task17 (
+        @TestInputCollection (presets = {IntStrNumbers.class}, percentage = {0.7, 0.8, 0.9, 1.7}, variation = 20)
+        Stream <String> numbers
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task18 (
+        @TestInputCollection (presets = {HexStrNumbers.class}, percentage = {0.8, 0.9, 1.3, 1.7}, variation = 20)
+        Stream <String> numbers
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task19 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.9, 1.2, 1.8, 1.9}, variation = 20)
+        Stream <Integer> numbers
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task20 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.9, 1.2, 1.8, 1.9}, variation = 10)
+        Stream <Integer> numbers,
+        @TestInputConstant (sequence = {0}, parameter = 2)
+        int limit
     );
     
 }

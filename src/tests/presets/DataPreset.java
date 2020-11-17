@@ -49,10 +49,9 @@ public interface DataPreset <T> {
         if (doesSupportStatistics () && !sequence.isEmpty ()) {
             final var conv = getStatisticsConverter ();
             
+            final var statistics = sequence.stream ().mapToDouble (conv).summaryStatistics ();
+            double avg = statistics.getAverage (), min = statistics.getMin (), max = statistics.getMax ();
             double med = sequence.stream ().mapToDouble (conv).sorted ().skip (length / 2).findFirst ().orElse (0.0);
-            double avg = sequence.stream ().mapToDouble (conv).average ().orElse (0.0);
-            double min = sequence.stream ().mapToDouble (conv).min ().orElse (0.0);
-            double max = sequence.stream ().mapToDouble (conv).max ().orElse (0.0);
             
             return new SequenceWithStatistics <> (sequence, length, min, max, avg, med);
         } else {
