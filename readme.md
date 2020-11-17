@@ -13,7 +13,7 @@ Apply you knowledge of _streams_, _lambdas_, _method handlers_ and other functio
 
 There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
-> **10** tasks are available now
+> **16** tasks are available now
 
 ### What to do
 

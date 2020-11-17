@@ -2,6 +2,8 @@ package tests;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import tests.presets.IntNumbers;
@@ -10,6 +12,8 @@ import tests.presets.StrNumbers;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
 import tests.utils.TestInputConstant;
+import tests.utils.TestInputFunction;
+import tests.utils.TestInputPredicate;
 import tests.utils.TestResult;
 
 public abstract class StreamTasksTests {
@@ -96,6 +100,60 @@ public abstract class StreamTasksTests {
         Stream <T> values2,
         @TestInputCollection (presets = {StrNumbers.class}, percentage = {0.4, 0.5, 0.5}, variation = 10)
         Stream <T> values3
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task11 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.7, 0.8, 0.9, 1.7}, variation = 10)
+        Stream <Integer> numbers,
+        @TestInputPredicate (indices = {1})
+        Predicate <Integer> condition
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, checkBy = 10, wrap = List.class) // TODO: fix wrapping in single invokers
+    public abstract Predicate <Integer> task12 (
+        @TestInputConstant (constant = {100, 200, 300}, variation = 50)
+        int from, 
+        @TestInputConstant (constant = {500}, variation = 100)
+        int to
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, checkBy = 10, wrap = List.class)
+    public abstract Predicate <Integer> task13 (
+        @TestInputPredicate (indices = {2})
+        Predicate <Integer> positive,
+        @TestInputPredicate (indices = {3})
+        Predicate <Integer> negative
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task14 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.7, 0.8, 0.9, 1.7}, variation = 10)
+        Stream <Integer> numbers,
+        @TestInputFunction (indices = {2})
+        Function <Integer, Integer> converter
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, checkBy = 13, wrap = List.class)
+    public abstract Function <Integer, Integer> task15 (
+        @TestInputConstant (constant = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, variation = 20)
+        int k, 
+        @TestInputConstant (constant = {-250}, variation = 500)
+        int b
+    );
+    
+    @Test (order = 1)
+    @TestResult (repeat = 1, checkBy = 13, wrap = List.class)
+    public abstract Function <Integer, Integer> task16 (
+        @TestInputFunction (indices = {2, 4, 3})
+        Function <Integer, Integer> f,
+        @TestInputFunction (indices = {3})
+        Function <Integer, Integer> g
     );
     
 }

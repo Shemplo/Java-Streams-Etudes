@@ -30,13 +30,19 @@ public class TestInputGenerator {
     
     private final Map <Class <? extends DataPreset <?>>, DataPreset <?>> presets = new HashMap <> ();
     
-    private final List <Function <?, ?>> functions = List.of (
+    private final List <? extends Function <?, ?>> functions = List.of (
         (String s) -> s.concat (" Solk"),
-        (String s) -> Integer.parseInt (s)
+        (String s) -> Integer.parseInt (s),
+        (Integer i) -> i + 2,
+        (Integer i) -> i * i,
+        (Integer i) -> i * 7
     );
     
-    private final List <Predicate <?>> predicates = List.of (
-        (String s) -> s.toLowerCase ().contains ("a")
+    private final List <? extends Predicate <?>> predicates = List.of (
+        (String s) -> s.toLowerCase ().contains ("a"),
+        (Integer i) -> i >= 500,
+        (Integer i) -> i % 2 == 0,
+        (Integer i) -> i % 3 == 0
     );
     
     public List <?> prepareInputDataForParameter (Parameter parameter, Random random) {

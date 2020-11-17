@@ -1,11 +1,15 @@
 package tasks;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import tests.StreamTasksTests;
 
 public class StreamTasks extends StreamTasksTests {
+    
+    // INTRODUCTION //
     
     /**
      * @return List of given constants [a, b + c - a, c]
@@ -85,6 +89,56 @@ public class StreamTasks extends StreamTasksTests {
      * @lines 1
      */
     public <T> Stream <T> task10 (Stream <T> values1, Stream <T> values2, Stream <T> values3) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    // FIRST FLOWS //
+    
+    /**
+     * @return Stream that contains only values accepted by predicate (condition)
+     * @lines 1
+     */
+    public Stream <Integer> task11 (Stream <Integer> numbers, Predicate <Integer> condition) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Predicate that will accept numbers in segment [from, to]
+     * @lines 1
+     */
+    public Predicate <Integer> task12 (int from, int to) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Predicate that combine two: `positive` as well and negation of `negative`
+     * @lines 1
+     */
+    public Predicate <Integer> task13 (Predicate <Integer> positive, Predicate <Integer> negative) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream that contains converted values by `converter`
+     * @lines 1
+     */
+    public Stream <Integer> task14 (Stream <Integer> numbers, Function <Integer, Integer> converter) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Function that convert each element (x) to expression: k * x + b
+     * @lines 1
+     */
+    public Function <Integer, Integer> task15 (int k, int b) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Function that convert each element (x) to expression: g (f (x) + 1)
+     * @lines 1
+     */
+    public Function <Integer, Integer> task16 (Function <Integer, Integer> f, Function <Integer, Integer> g) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     
