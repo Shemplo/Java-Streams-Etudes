@@ -70,3 +70,10 @@ For example, you can check how many tasks you can do in limited time
 or how many tasks you can do with single run of tests (on the first attempt), ...
 
 ##### Good luck, have fun!
+
+<hr />
+
+Version 0.2.0 is available for preview [here](https://github.com/Shemplo/Java-Streams-Etudes/tree/v0.2.0)
+
+* Test system is generaly reworked (it can be interested as good practice)
+* Improved description and sequence of tasks
