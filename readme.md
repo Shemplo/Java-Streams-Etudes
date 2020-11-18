@@ -87,3 +87,4 @@ Version 0.1.0 is available [here](https://github.com/Shemplo/Java-Streams-Etudes
 
 * The first draft of this project
 * It has different 60 tasks
+
