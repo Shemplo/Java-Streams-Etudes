@@ -1,80 +1,47 @@
 package tests;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.function.BiFunction;
 
-import tasks.StreamTasks;
-
-public class TaskTests <R, O> {
+public class TaskTests {
     
     /*******************************/
     /* DO NOT TOUCH METHODS BELLOW */
     /*******************************/
     
-    private final List <BiConsumer <StreamTasks, BiConsumer <R, O>>> cases = new ArrayList <> ();
-    private final List <Boolean> parallel = new ArrayList <> ();
+    private final List <?> inputs; 
+    private final Method method;
+    
+    public TaskTests (Method method, List <?> inputs) {
+        this.method = method; this.inputs = inputs;
+    }
+    
+    private final List <BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult>> cases = new ArrayList <> ();
+    
+    public TaskTests addCase (BiFunction <StreamTasksTests, StreamTasksTests, InvocationResult> caze) {
+        cases.add (caze);
+        return this;
+    }
     
     public int getCasesNumber () {
         return cases.size ();
     }
     
-    public TaskTests <R, O> add (BiConsumer <StreamTasks, BiConsumer <R, O>> testCase, boolean parallel) {
-        this.parallel.add (parallel);
-        cases.add (testCase);
-        return this;
+    public Method getMethod () {
+        return method;
     }
     
-    public TaskTests <R, O> add (BiConsumer <StreamTasks, BiConsumer <R, O>> testCase) {
-        return add (testCase, false);
+    public List <?> getInputs () {
+        return Collections.unmodifiableList (inputs);
     }
     
-    public void runCase (int index, StreamTasks implementation) throws AssertionError {
-        cases.get (index).accept (implementation, (output, expected) -> {  
-            findAndRunAssertionMethod (output, expected, parallel.get (index));
-        });
-    }
-    
-    private static <A, E> void findAndRunAssertionMethod (A actual, E expected, Boolean parallel) throws AssertionError {
-        final var aType = actual instanceof IntStream ? IntStream.class 
-                        : actual instanceof Stream ? Stream.class 
-                        : actual instanceof Integer ? Integer.class 
-                        : actual instanceof List ? List.class 
-                        : actual instanceof Map ? Map.class
-                        : actual instanceof Set ? Set.class
-                        : null;
-        final var eType = expected instanceof IntStream ? IntStream.class 
-                        : expected instanceof Stream ? Stream.class 
-                        : expected instanceof Integer ? Integer.class 
-                        : expected instanceof List ? List.class 
-                        : expected instanceof Map ? Map.class
-                        : expected instanceof Set ? Set.class
-                        : null;
-        try {
-            if (aType == IntStream.class || aType == Stream.class) {
-                OutputAssertions.class.getMethod (
-                    "assertOutput", aType, boolean.class, eType
-                ).invoke (null, actual, parallel, expected);
-            } else {                
-                OutputAssertions.class.getMethod ("assertOutput", aType, eType).invoke (null, actual, expected);
-            }
-        } catch (
-            NoSuchMethodException | SecurityException | IllegalAccessException re
-        ) {
-            re.printStackTrace ();
-            throw new AssertionError ("Failed to check results");
-        } catch (InvocationTargetException ite) {
-            if (ite.getCause () instanceof AssertionError) {
-                throw (AssertionError) ite.getCause ();
-            }
-            
-            throw new AssertionError ("Failed to check results");
-        }
+    public InvocationResult runTests (StreamTasksTests implementation, StreamTasksTests reference) {
+        final var stub = new InvocationResult (null, 0);
+        return cases.stream ().map (caze -> caze.apply (implementation, reference))
+             . reduce (stub, (a, b) -> a == stub && b != null ? b : a);
     }
     
 }

@@ -4,36 +4,47 @@
 [![GitHub license](https://img.shields.io/github/license/Shemplo/Java-Streams-Etudes.svg)](https://github.com/Shemplo/Java-Streams-Etudes/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/Shemplo/Java-Streams-Etudes.svg)](https://github.com/Shemplo/Java-Streams-Etudes/stargazers)
 
-This repository can be useful if you are beginner in _Java Stream API_. 
-To check yourself you will need to implement some methods with described logic using knowledge of 
-Streams, Lambdas, Method handlers and other functional things.
+Do you know how to use Java Stream API?
+
+* If **NO** but you are interested in it then you can use this project as a roadmap of things to learn
+* If **YES** then you can have a practice here to check your skills 
+
+Apply you knowledge of _streams_, _lambdas_, _method handlers_ and other functional Java things.
 
 There are also some tasks that will make think even experienced programmers. Try to solve them all.
 
-> The number of almost independent tasks is **60** now
+> **25** tasks are available now
 
 ### What to do
 
-You just need to implement methods that are declared and stubbed in class `tasks.StreamTasks` in `src` folder.
+> Clone repository → implement methods → run tests → fix mistakes
+
+Methods to implement are placed in class `tasks.StreamTasks` in `src` folder. 
+Initially they are stubbed with standard `UnsupportedOperationException` (and tests know about that). 
+You need to replace such lines with solution consists of stream flow or something related to it
+(description and hints for each task are provided).
+
+It's **prohibited** to use standard cycles (`for`, `while`, `do-while`, recursion) at all and 
+conditions (`if`, `if-else`, ...) out of stream operations. The main goal of this project is to 
+teach you how to use functional approach in practice. One **possible exclusion** from pure functional 
+paradigm is declaring and usage of local variables.
 
 ### Running tests
 
-Due to this project is orientated for beginners **no dependent libraries** are required.
+Due to this project is orientated to beginners **no dependent libraries** are required.
+If you know how to add dependencies and really know for what then you can do it manually 
+(but, be pointed, all tasks can be solved using only standard Java library).
 
-* You will need just a **JVM of 11 version (or higher)**.
+> Main requirement is **JVM of 11 version (or higher)**
 
-Clone this repository to your computer and then run main method from `tasks.StreamTasksMain` 
-class in your preferred IDE or type in console:
+Run main method from `tasks.StreamTasksMain` class in your preferred IDE or run a script file `test.(cmd|sh)`.
 
-```bash
-javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain
-```
-
-Flag `-ea` is required to enable `assert` java key word for tests checker. Otherwise all tests will not be run properly.
+Flag `-ea` is required to enable `assert` key word for tests checker. Otherwise all tests will not be run properly.
 
 #### Check program and verdicts
 
 Check program will run tests for all tasks and then write verdict for each of tasks.
+
 Possible verdicts:
 
 * **accepted** - you solved this task
@@ -42,38 +53,38 @@ Possible verdicts:
 * **missed NULL check** - you forgot to check something for `null` reference
 * **runtime exception** - something goes extremely bad
 
-Until you solved all tasks with verdict `accepted` the program will finish with non zero exit code.
+Until you solved all tasks with verdict `accepted` the program will finish with non-zero exit code.
 
 ##### Examples
 
-You can run check program with argument `example` to see how it will look like.
+You can run check program with argument `example`. 
+For that add `example` word to passing arguments in IDE or to the end of running scripts:
+`test.cmd example` (for Windows) and `./test.sh example` (for Unix)
 
-```bash
-javac -sourcepath src -d bin src/tasks/StreamTasksMain.java && java -ea -cp bin tasks.StreamTasksMain example
-```
+There are some implemented tasks in class `tasks.StreamTasksExample`, so they would be tested in `example` mode.
 
-
-In class `tasks.StreamTasksExample` there are some implemented tasks 
-(not guaranteed that implementation is correct or in optimal way),
-so this class will be tested if you run check program in `example` mode. 
+> Not guaranteed that implementation is correct or in optimal way ;)
 
 #### Solutions
 
-In case you really don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` class.
+In case you don't know how to solve some task than you can see solution in `tasks.solution.StreamTasksSolution` 
+class in `src` folder. This class is used as reference solution to check answers, so you can copy-paste code to the
+task and this task will be accepted.
 
-Try to avoid this action :)
+Try to avoid any interaction with solutions until you completed all tasks :)
 
 #### Challenges
 
-You can also use this repository for different challenges. 
-For example, you can check how many tasks you can do in limited time 
-or how many tasks you can do with single run of tests (on the first attempt), ...
+You can also use tasks from this project for different challenges. 
+For example, you can check how many tasks you can do in **limited time** 
+or how much time you will need to **solve them all**, etc.
 
-##### Good luck, have fun!
+##### Good luck, have <s>fun</s> progress!
 
 <hr />
 
-Version 0.2.0 is available for preview [here](https://github.com/Shemplo/Java-Streams-Etudes/tree/v0.2.0)
+Version 0.1.0 is available [here](https://github.com/Shemplo/Java-Streams-Etudes/tree/7206e9138a3c2ae0347d983696dfaf56002485a0)
 
-* Test system is generaly reworked (it can be interested as good practice)
-* Improved description and sequence of tasks
+* The first draft of this project
+* It has different 60 tasks
+

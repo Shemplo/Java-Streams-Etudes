@@ -3,20 +3,19 @@ package tests;
 import java.util.Locale;
 import java.util.Optional;
 
-import tasks.StreamTasks;
-
 public class TestsRunner {
     
     /*******************************/
     /* DO NOT TOUCH METHODS BELLOW */
     /*******************************/
     
-    private final StreamTasks implementation;
+    private final StreamTasksTests implementation, reference;
     private final TestsPool testsPool;
     
-    public TestsRunner (StreamTasks implementation, StreamTasks reference) {
-        testsPool = new TestsPool (reference);
+    public TestsRunner (StreamTasksTests implementation, StreamTasksTests reference) {
+        testsPool = new TestsPool (StreamTasksTests.class);
         this.implementation = implementation;
+        this.reference = reference;
     }
     
     public int test () {
@@ -31,11 +30,12 @@ public class TestsRunner {
             System.out.printf ("Test %3d -- ", i + 1);
             
             final var start = System.currentTimeMillis ();
+            long internalRuntime = Long.MAX_VALUE;
             Throwable throwable = null;
             TestVerdict verdict = null;
             
             try {
-                runTest (i, implementation);
+                internalRuntime = testsPool.runTest (i, implementation, reference).getRuntime ();
                 verdict = TestVerdict.ACCEPTED;
             } catch (UnsupportedOperationException uoe) {
                 verdict = TestVerdict.NOT_IMPL;
@@ -51,7 +51,8 @@ public class TestsRunner {
             } finally {
                 final var end = System.currentTimeMillis ();
                 
-                System.out.printf ("[%6dms] %-20s%n", end - start, verdict.text);
+                final var runtime = Math.min (end - start, internalRuntime);
+                System.out.printf ("[%6dms] %-20s%n", runtime, verdict.text);
                 Optional.ofNullable (throwable).ifPresent (t -> {
                     System.out.printf ("  %s%n", t.getMessage ());
                 });
@@ -66,13 +67,6 @@ public class TestsRunner {
         );
         
         return -failed;
-    }
-    
-    private void runTest (int index, StreamTasks impl) throws UnsupportedOperationException, AssertionError {
-        final var tests = testsPool.getTaskTests (index);
-        for (int i = 0; i < tests.getCasesNumber (); i++) {
-            tests.runCase (i, impl);
-        }
     }
     
 }
