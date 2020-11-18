@@ -80,3 +80,10 @@ For example, you can check how many tasks you can do in **limited time**
 or how much time you will need to **solve them all**, etc.
 
 ##### Good luck, have <s>fun</s> progress!
+
+<hr />
+
+Version 0.1.0 is available [here](https://github.com/Shemplo/Java-Streams-Etudes/tree/7206e9138a3c2ae0347d983696dfaf56002485a0)
+
+* The first draft of this project
+* It has different 60 tasks
