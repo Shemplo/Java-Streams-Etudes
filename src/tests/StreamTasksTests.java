@@ -199,7 +199,34 @@ public abstract class StreamTasksTests {
     @TestResult (repeat = 1, wrap = List.class)
     public abstract IntStream task22 (
         @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.8, 0.9, 1.0}, variation = 10)
-        List <Integer> number
+        List <Integer> numbers
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task23 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.4, 0.5, 1.2, 1.7, 2.0}, variation = 10)
+        List <Integer> numbers,
+        @TestInputConstant (constant = {2, 3, 4})
+        int offset
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, checkBy = 6, wrap = List.class)
+    public abstract Stream <Integer> task24 (
+        @TestInputCollection (presets = {IntNumbers.class}, constant = {5, 10, 15}, variation = 10)
+        List <Integer> numbers
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task25 (
+        @TestInputCollection (presets = {IntNumbers.class}, constant = {5, 10, 15}, 
+            percentage = {1.3, 1.4}, variation = 10)
+        List <Integer> numbers1,
+        @TestInputCollection (presets = {IntNumbers.class}, constant = {5, 10, 15}, 
+            percentage = {1.3, 1.4}, variation = 10)
+        List <Integer> numbers2
     );
     
 }

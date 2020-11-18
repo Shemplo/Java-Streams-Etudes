@@ -161,6 +161,8 @@ public class TestInvokerGenerator {
                     } else {
                         input [i] = stream;
                     }
+                } else if (paramInput [i] instanceof Stream) {
+                    input [i] = paramInput [i];
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }

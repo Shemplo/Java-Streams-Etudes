@@ -3,6 +3,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -213,6 +215,38 @@ public class StreamTasks extends StreamTasksTests {
      * @lines 1
      */
     public IntStream task22 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of integer numbers on `offset` positions (0 position included)
+     * @see IntStream#iterate(int, IntPredicate, IntUnaryOperator)
+     * @example [0, 1, 2, 3, 4, 5, 6, 7, 8], 3 -> [0, 3, 6]
+     * @lines 1
+     */
+    public IntStream task23 (List <Integer> numbers, int offset) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Infinite stream of integers (cycled on given `numbers`)
+     * @see IntStream#iterate(int, IntUnaryOperator)
+     * @see IntStream#mapToObj(IntFunction)
+     * @see IntStream#boxed()
+     * @example [0, 1, 2, 3, 4] -> [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, ...]
+     * @lines 1
+     */
+    public Stream <Integer> task24 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of summed values on the same positions from given lists of numbers 
+     * (only positions that there are in both lists)
+     * @example [0, 1, 2, 3, 4], [10, 12, 14] -> [10, 13, 16]
+     * @lines 1
+     */
+    public IntStream task25 (List <Integer> numbers1, List <Integer> numbers2) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     

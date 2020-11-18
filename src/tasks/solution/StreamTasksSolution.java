@@ -116,8 +116,24 @@ public class StreamTasksSolution extends StreamTasksTests {
     }
     
     @Override
-    public IntStream task22 (List <Integer> number) {
-        return IntStream.range (0, number.size ()).map (i -> number.get (i) + i);
+    public IntStream task22 (List <Integer> numbers) {
+        return IntStream.range (0, numbers.size ()).map (i -> numbers.get (i) + i);
+    }
+    
+    @Override
+    public IntStream task23 (List <Integer> numbers, int offset) {
+        return IntStream.iterate (0, i -> i < numbers.size (), i -> i + offset).map (numbers::get);
+    }
+    
+    @Override
+    public Stream <Integer> task24 (List <Integer> numbers) {
+        return IntStream.iterate (0, i -> (i + 1) % numbers.size ()).mapToObj (numbers::get);
+    }
+    
+    @Override
+    public IntStream task25 (List <Integer> numbers1, List <Integer> numbers2) {
+        return IntStream.range (0, Math.min (numbers1.size (), numbers2.size ()))
+             . map (i -> numbers1.get (i) + numbers2.get (i));
     }
     
 }
