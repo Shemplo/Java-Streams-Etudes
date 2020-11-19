@@ -11,10 +11,11 @@ import tasks.utils.Item;
 public class Boxes extends AbstractMappingListPreset <Box, Item> {
     
     @Override
-    public void initialize (Random r, DataPreset <List <Item>> items) {
+    public Boxes initialize (Random r, DataPreset <List <Item>> items) {
         IntStream.range (0, 1000).mapToObj (i -> items.getRandomSequence (i / 10 + r.nextInt (10), r, false).data)
             . map (its -> its.stream ().reduce (new Box (), Box::addItem, (a, b) -> a.addItems (b.getItems ())))
             . forEach (values::add);
+        return this;
     }
 
     @Override

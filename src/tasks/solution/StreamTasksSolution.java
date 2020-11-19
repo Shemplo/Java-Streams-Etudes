@@ -1,5 +1,6 @@
 package tasks.solution;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -134,6 +135,12 @@ public class StreamTasksSolution extends StreamTasksTests {
     public IntStream task25 (List <Integer> numbers1, List <Integer> numbers2) {
         return IntStream.range (0, Math.min (numbers1.size (), numbers2.size ()))
              . map (i -> numbers1.get (i) + numbers2.get (i));
+    }
+    
+    @Override
+    public void testMapInput (Map <String, Integer> name2age) {
+        System.out.println (name2age); // SYSOUT
+        System.out.println ("Save me Gods!"); // SYSOUT
     }
     
 }

@@ -7,8 +7,9 @@ import java.util.stream.IntStream;
 public class IntNumbers extends AbstractListPreset <Integer> {
 
     @Override
-    public void initialize (Random r) {
+    public IntNumbers initialize (Random r) {
         IntStream.range (0, 1000).map (__ -> r.nextInt (1000)).forEach (values::add);
+        return this;
     }
     
     @Override

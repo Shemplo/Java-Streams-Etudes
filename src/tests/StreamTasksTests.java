@@ -1,6 +1,7 @@
 package tests;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import tests.presets.HexStrNumbers;
 import tests.presets.IntNumbers;
 import tests.presets.IntStrNumbers;
+import tests.presets.NamesAges;
 import tests.presets.Names;
 import tests.utils.Test;
 import tests.utils.TestInputCollection;
@@ -227,6 +229,12 @@ public abstract class StreamTasksTests {
         @TestInputCollection (presets = {IntNumbers.class}, constant = {5, 10, 15}, 
             percentage = {1.3, 1.4}, variation = 10)
         List <Integer> numbers2
+    );
+    
+    @Test (order = 100)
+    public abstract void testMapInput (
+        @TestInputCollection (presets = {NamesAges.class}, constant = {10, 12}, variation = 5, nulls = {5, 1})
+        Map <String, Integer> name2age
     );
     
 }

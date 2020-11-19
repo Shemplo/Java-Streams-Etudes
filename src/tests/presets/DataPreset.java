@@ -8,7 +8,7 @@ import tests.inputs.SequenceWithStatistics;
 
 public interface DataPreset <T> {
     
-    void initialize (Random r);
+    DataPreset <T> initialize (Random r);
     
     T getData ();
     

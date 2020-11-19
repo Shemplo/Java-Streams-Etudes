@@ -71,8 +71,9 @@ public class TestsPool {
             p -> inputGenerator.prepareInputDataForParameter (p, random)
         ).collect (Collectors.toList ());
         
-        var maxCases = inputs.stream ().mapToInt (List::size).max ().orElse (0);
-        maxCases = maxCases == 0 ? result.repeat () : Math.max (maxCases, result.repeat ());
+        final var repeats = result == null ? 1 : result.repeat ();
+        var maxCases = inputs.stream ().mapToInt (List::size).max ().orElse (1);
+        maxCases = maxCases == 0 ? result.repeat () : Math.max (maxCases, repeats);
         
         final var tests = new TaskTests (method, inputs);
         

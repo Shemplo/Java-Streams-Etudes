@@ -7,9 +7,10 @@ import java.util.stream.IntStream;
 public class IntStrNumbers extends AbstractListPreset <String> {
 
     @Override
-    public void initialize (Random r) {
+    public IntStrNumbers initialize (Random r) {
         IntStream.range (0, 1000).map (__ -> r.nextInt (1000))
             .mapToObj (String::valueOf).forEach (values::add);
+        return this;
     }
     
     @Override

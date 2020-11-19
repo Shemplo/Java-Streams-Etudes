@@ -196,6 +196,8 @@ public class TestInputGenerator {
         final var preset = presets.get (presetType);
         if (preset != null) { return preset; }
         
+        System.out.println ("Loading preset: " + presetType); // SYSOUT
+        
         try {
             final var data = presetType.getConstructor ().newInstance ();
             if (DataMappingPreset.class.isAssignableFrom (presetType)) {
@@ -214,6 +216,7 @@ public class TestInputGenerator {
             | NoSuchMethodException | SecurityException 
             e
         ) {
+            e.printStackTrace ();
             return null;
         }
     }

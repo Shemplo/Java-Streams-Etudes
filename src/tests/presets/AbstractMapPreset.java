@@ -15,7 +15,7 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
     protected final Map <K, V> map = new HashMap <> ();
     
     @Override
-    public void initialize (Random r) {
+    public AbstractMapPreset <K, V> initialize (Random r) {
         final var values = initializeValues (r);
         final var keys = initializeKeys (r);
         
@@ -24,6 +24,8 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
             final var value = i >= values.size () ? null : values.get (i);
             map.put (keys.get (i), value);
         }
+        
+        return this;
     }
     
     protected abstract List <V> initializeValues (Random r);
@@ -42,10 +44,10 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
     
     @Override
     public SequenceWithStatistics <Map <K, V>> getRandomSequence (int length, Random r, boolean unique, int nulls) {
-        if (length > map.size ()) {
+        if (length + nulls > map.size ()) {
             throw new IllegalArgumentException (String.format (
                 "Requested number of map (%d) is more than actual size of preset (%d)",
-                length, map.size ()
+                length + nulls, map.size ()
             ));
         }
         
@@ -65,6 +67,10 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
                 final var conv = getStatisticsConverter ();
                 statisticsData.add (conv.applyAsDouble (key, value));
             }
+        }
+        
+        for (int i = 0; i < nulls; i++) {
+            sequence.put (keys.get (length + i), null);
         }
         
         if (hasStatistics && !sequence.isEmpty ()) {

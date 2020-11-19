@@ -6,10 +6,10 @@ public interface DataMappingPreset <T, S> extends DataPreset <T> {
     
     Class <? extends DataPreset <S>> getSourcePreset ();
     
-    void initialize (Random r, DataPreset <S> preset);
+    DataMappingPreset <T, S> initialize (Random r, DataPreset <S> preset);
     
     @Override
-    default void initialize (Random r) {
+    default DataMappingPreset <T, S> initialize (Random r) {
         throw new UnsupportedOperationException ();
     }
     

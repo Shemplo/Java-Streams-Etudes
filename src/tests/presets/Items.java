@@ -9,7 +9,7 @@ import tasks.utils.Item;
 public class Items extends AbstractListPreset <Item> {
     
     @Override
-    public void initialize (Random r) {
+    public Items initialize (Random r) {
         IntStream.range (0, 1000).mapToObj (__ -> {
             final var item = new Item ();
             
@@ -21,6 +21,7 @@ public class Items extends AbstractListPreset <Item> {
             
             return item;
         }).forEach (values::add);
+        return this;
     }
     
     public static char randomCategory (Random r) {

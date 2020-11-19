@@ -10,9 +10,9 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import tests.StreamTasksTests;
+import tasks.solution.StreamTasksSolution;
 
-public class StreamTasks extends StreamTasksTests {
+public class StreamTasks extends StreamTasksSolution {
     
     // INTRODUCTION //
     
