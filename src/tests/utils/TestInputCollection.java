@@ -21,6 +21,8 @@ public @interface TestInputCollection {
     
     int variation () default 0;
     
+    int [] nulls () default {0};
+    
     boolean allUnique () default false;
     
     boolean parallel () default false;

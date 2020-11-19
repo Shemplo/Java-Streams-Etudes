@@ -10,7 +10,7 @@ public class HexStrNumbers extends IntStrNumbers {
     public void initialize (Random r) {
         IntStream.range (0, 1000).map (__ -> r.nextInt (1000))
             .mapToObj (n -> String.format ("0x%x", n))
-            .forEach (numbers::add);
+            .forEach (values::add);
     }
 
     @Override

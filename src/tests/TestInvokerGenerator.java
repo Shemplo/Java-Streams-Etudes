@@ -127,6 +127,7 @@ public class TestInvokerGenerator {
         int.class, double.class, Integer.class, Double.class
     );
     
+    @SuppressWarnings ("unchecked")
     private InvocationResult prepareAndInvokeImplementation (
         StreamTasksTests implementation, Method method, Object [] paramInput, long randomSeed
     ) {
@@ -148,13 +149,13 @@ public class TestInvokerGenerator {
                 }
             } else if (parameters [i].getType () == Set.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    input [i] = Set.copyOf (((SequenceWithStatistics <?>) paramInput [i]).data);
+                    input [i] = Set.copyOf (((SequenceWithStatistics <List <?>>) paramInput [i]).data);
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Stream.class || isIntStream) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    final var sws = (SequenceWithStatistics <?>) paramInput [i];
+                    final var sws = (SequenceWithStatistics <List <?>>) paramInput [i];
                     final var stream = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
                     if (isIntStream) {
                         input [i] = stream.mapToInt (num -> (Integer) num);
@@ -168,7 +169,6 @@ public class TestInvokerGenerator {
                 }
             } else if (parameters [i].getType () == Supplier.class) {
                 if (paramInput [i] instanceof Function) {
-                    @SuppressWarnings ("unchecked")
                     final var supplier = (Function <Random, Supplier <?>>) paramInput [i];
                     input [i] = supplier.apply (random);
                 } else {

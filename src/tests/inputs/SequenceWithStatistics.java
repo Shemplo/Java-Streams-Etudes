@@ -1,16 +1,14 @@
 package tests.inputs;
 
-import java.util.List;
-
 public class SequenceWithStatistics <T> {
     
-    public final List <T> data;
+    public final T data;
     
     public final int length;
     public final double min, max, average, median;
     
     public SequenceWithStatistics (
-        List <T> data, int length, double min, double max, 
+        T data, int length, double min, double max, 
         double average, double median
     ) {
         this.average = average; 
@@ -21,7 +19,7 @@ public class SequenceWithStatistics <T> {
         this.max = max; 
     }
     
-    public SequenceWithStatistics (List <T> data) {
+    public SequenceWithStatistics (T data) {
         this (data, 0, 0.0, 0.0, 0.0, 0.0);
     }
     
