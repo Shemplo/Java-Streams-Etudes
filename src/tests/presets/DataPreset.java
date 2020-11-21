@@ -25,14 +25,14 @@ public interface DataPreset <T> {
     
     boolean doesSupportStatistics ();
     
-    default SequenceWithStatistics <T> getRandomSequence (int length, Random r, boolean unique) {
-        return getRandomSequence (length, r, unique, 0);
+    default SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique) {
+        return getRandomSequence (levels, length, r, unique, 0);
     }
     
-    default SequenceWithStatistics <T> getRandomSequence (int length, Random r, boolean unique, double nulls) {
-        return getRandomSequence (length, r, unique, (int) Math.round (length * nulls));
+    default SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique, double nulls) {
+        return getRandomSequence (levels, length, r, unique, (int) Math.round (length * nulls));
     }
     
-    SequenceWithStatistics <T> getRandomSequence (int length, Random r, boolean unique, int nulls);
+    SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique, int nulls);
     
 }

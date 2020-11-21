@@ -12,7 +12,7 @@ public class Boxes extends AbstractMappingListPreset <Box, Item> {
     
     @Override
     public Boxes initialize (Random r, DataPreset <List <Item>> items) {
-        IntStream.range (0, 1000).mapToObj (i -> items.getRandomSequence (i / 10 + r.nextInt (10), r, false).data)
+        IntStream.range (0, 1000).mapToObj (i -> items.getRandomSequence (1, i / 10 + r.nextInt (10), r, false).data)
             . map (its -> its.stream ().reduce (new Box (), Box::addItem, (a, b) -> a.addItems (b.getItems ())))
             . forEach (values::add);
         return this;

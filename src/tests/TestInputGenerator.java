@@ -86,7 +86,7 @@ public class TestInputGenerator {
             for (final var constantInput : annotation.constant ()) {
                 final var length = constantInput + random.nextInt (varation);
                 final var ns = nulls [nullsIndex];
-                inputsCollector.add (preset.getRandomSequence (length, random, unique, ns)
+                inputsCollector.add (preset.getRandomSequence (1, length, random, unique, ns)
                         .setParallelStream (parallel));
                 nullsIndex = (nullsIndex + 1) % nulls.length;
             }
@@ -95,7 +95,7 @@ public class TestInputGenerator {
                 final var percent = percentageInput + random.nextInt (varation) / 100.0;
                 final var length = (int) Math.round (percent * preset.getSize ());
                 final var ns = nulls [nullsIndex];
-                inputsCollector.add (preset.getRandomSequence (length, random, unique, ns)
+                inputsCollector.add (preset.getRandomSequence (1, length, random, unique, ns)
                         .setParallelStream (parallel));
                 nullsIndex = (nullsIndex + 1) % nulls.length;
             }
@@ -134,7 +134,7 @@ public class TestInputGenerator {
                 if (annotation.mode () == SupplierMode.SEQUENTIAL) {
                     inputCollector.add (R -> {
                         final var sequence = (List <?>) (cycle == -1 ? preset.getData () 
-                                : preset.getRandomSequence (cycle, R, false).data);
+                                : preset.getRandomSequence (1, cycle, R, false).data);
                         final var counter = new AtomicInteger ();
                         
                         return () -> sequence.get (counter.getAndUpdate (
@@ -144,7 +144,7 @@ public class TestInputGenerator {
                 } else if (annotation.mode () == SupplierMode.SHUFFLED_SEQUENTIAL) {
                     inputCollector.add (R -> {
                         final var rawSequence = (List <?>) (cycle == -1 ? preset.getData () 
-                            : preset.getRandomSequence (cycle, R, false).data);                        
+                            : preset.getRandomSequence (1, cycle, R, false).data);                        
                         final var sequence = new ArrayList <> (rawSequence);
                         final var counter = new AtomicInteger ();
                         Collections.shuffle (sequence, R);

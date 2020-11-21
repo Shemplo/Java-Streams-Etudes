@@ -43,7 +43,7 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
     }
     
     @Override
-    public SequenceWithStatistics <Map <K, V>> getRandomSequence (int length, Random r, boolean unique, int nulls) {
+    public SequenceWithStatistics <Map <K, V>> getRandomSequence (int levels, int length, Random r, boolean unique, int nulls) {
         if (length + nulls > map.size ()) {
             throw new IllegalArgumentException (String.format (
                 "Requested number of map (%d) is more than actual size of preset (%d)",

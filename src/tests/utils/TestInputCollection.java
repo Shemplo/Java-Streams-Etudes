@@ -23,6 +23,8 @@ public @interface TestInputCollection {
     
     int [] nulls () default {0};
     
+    int levels () default 1;
+    
     boolean allUnique () default false;
     
     boolean parallel () default false;

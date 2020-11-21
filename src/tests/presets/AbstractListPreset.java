@@ -20,7 +20,7 @@ public abstract class AbstractListPreset <T> implements DataPreset <List <T>> {
         return Collections.unmodifiableList (values);
     }
     
-    public SequenceWithStatistics <List <T>> getRandomSequence (int length, Random r, boolean unique, int nulls) {
+    public SequenceWithStatistics <List <T>> getRandomSequence (int levels, int length, Random r, boolean unique, int nulls) {
         List <T> sequence = List.of ();
         
         if (unique) {
@@ -60,6 +60,57 @@ public abstract class AbstractListPreset <T> implements DataPreset <List <T>> {
         } else {
             return new SequenceWithStatistics <> (sequence);
         }
+    }
+    
+    public static List <Integer> doHonestSplit (int levels, int length) {
+        final var split = new ArrayList <Integer> ();
+        final var parts = 2 << (levels - 1);
+        
+        if (parts >= length) {
+            for (int i = 0; i < parts; i++) {
+                split.add (i < length ? 1 : 0);
+            }
+        } else {
+            final var partSize = (int) Math.round (length * 1.0 / parts);
+            int sum = 0;
+            
+            for (int i = 0; i < parts; i++) {
+                final var value = Math.min (partSize, length - sum);
+                split.add (value);
+                sum += value;
+            }
+        }
+        
+        return split;
+    }
+    
+    public static List <Integer> doDishonestSplit (int levels, int length, Random r) {
+        final var split = new ArrayList <Integer> ();
+        final var parts = 2 << (levels - 1);
+        
+        if (parts >= length) {
+            for (int i = 0; i < parts; i++) {
+                split.add (i < length ? 1 : 0);
+            }
+            
+            Collections.shuffle (split, r);
+        } else {
+            final var borders = IntStream.range (0, parts - 1)
+                . mapToObj (__ -> r.nextInt (length)).sorted ()
+                . collect (Collectors.toList ());
+            
+            int previousBorder = 0, sum = 0;
+            for (int border : borders) {
+                final var value = border - previousBorder;
+                previousBorder = border;
+                split.add (value);
+                sum += value;
+            }
+            
+            split.add (length - sum);
+        }
+        
+        return split;
     }
     
     @Override

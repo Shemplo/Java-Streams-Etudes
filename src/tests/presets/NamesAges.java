@@ -15,7 +15,7 @@ public class NamesAges extends AbstractMapPreset <String, Integer> {
 
     @Override
     protected List <String> initializeKeys (Random r) {
-        return new Names ().initialize (r).getRandomSequence (30, r, true).data;
+        return new Names ().initialize (r).getRandomSequence (1, 30, r, true).data;
     }
 
     @Override
