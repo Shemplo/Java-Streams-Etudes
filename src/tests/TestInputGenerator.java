@@ -27,7 +27,7 @@ import tests.utils.TestInputSupplier;
 
 public class TestInputGenerator {
     
-    private final Map <Class <? extends DataPreset <?>>, DataPreset <?>> presets = new HashMap <> ();
+    private final Map <Class <? extends DataPreset>, DataPreset> presets = new HashMap <> ();
     
     private final List <? extends Function <?, ?>> functions = List.of (
         (String s) -> s.concat (" Solk"),
@@ -71,8 +71,10 @@ public class TestInputGenerator {
     private List <?> prepareCollectionInputForParameter (
         Parameter parameter, TestInputCollection annotation, Random random
     ) {
+        final var arrangement = annotation.arrengement ();
         final var inputsCollector = new ArrayList <> ();
         final var parallel = annotation.parallel ();
+        final var levels = annotation.levels ();
         
         for (final var presetType : annotation.presets ()) {
             final var preset = getPreset (presetType, random);
@@ -86,8 +88,9 @@ public class TestInputGenerator {
             for (final var constantInput : annotation.constant ()) {
                 final var length = constantInput + random.nextInt (varation);
                 final var ns = nulls [nullsIndex];
-                inputsCollector.add (preset.getRandomSequence (1, length, random, unique, ns)
-                        .setParallelStream (parallel));
+                inputsCollector.add (preset.getRandomSequence (
+                    levels, arrangement, length, random, unique, ns
+                ).setParallelStream (parallel));
                 nullsIndex = (nullsIndex + 1) % nulls.length;
             }
             
@@ -95,8 +98,9 @@ public class TestInputGenerator {
                 final var percent = percentageInput + random.nextInt (varation) / 100.0;
                 final var length = (int) Math.round (percent * preset.getSize ());
                 final var ns = nulls [nullsIndex];
-                inputsCollector.add (preset.getRandomSequence (1, length, random, unique, ns)
-                        .setParallelStream (parallel));
+                inputsCollector.add (preset.getRandomSequence (
+                    levels, arrangement, length, random, unique, ns
+                ).setParallelStream (parallel));
                 nullsIndex = (nullsIndex + 1) % nulls.length;
             }
         }
@@ -191,18 +195,17 @@ public class TestInputGenerator {
         return List.of (new ConsumerGenerator <> (annotation.mode ()));
     }
     
-    @SuppressWarnings ("unchecked")
-    private DataPreset <?> getPreset (Class <? extends DataPreset <?>> presetType, Random random) {
+    private DataPreset getPreset (Class <? extends DataPreset> presetType, Random random) {
         final var preset = presets.get (presetType);
         if (preset != null) { return preset; }
         
-        System.out.println ("Loading preset: " + presetType); // SYSOUT
+        System.out.println ("Loading preset: " + presetType + "..."); // SYSOUT
         
         try {
             final var data = presetType.getConstructor ().newInstance ();
             if (DataMappingPreset.class.isAssignableFrom (presetType)) {
-                final var mdata = (DataMappingPreset <?, Object>) data;
-                final var source = (DataPreset <Object>) getPreset (mdata.getSourcePreset (), random);
+                final var mdata = (DataMappingPreset) data;
+                final var source = (DataPreset) getPreset (mdata.getSourcePreset (), random);
                 mdata.initialize (random, source);
             } else {
                 data.initialize (random);

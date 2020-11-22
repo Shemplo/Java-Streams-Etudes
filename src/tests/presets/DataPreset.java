@@ -4,13 +4,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
+import tests.inputs.LevelsArrange;
 import tests.inputs.SequenceWithStatistics;
 
-public interface DataPreset <T> {
+public interface DataPreset {
     
-    DataPreset <T> initialize (Random r);
+    DataPreset initialize (Random r);
     
-    T getData ();
+    Object getData ();
     
     default int getSize () {
         final var data = getData ();
@@ -25,14 +26,14 @@ public interface DataPreset <T> {
     
     boolean doesSupportStatistics ();
     
-    default SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique) {
+    default <T> SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique) {
         return getRandomSequence (levels, length, r, unique, 0);
     }
     
-    default SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique, double nulls) {
-        return getRandomSequence (levels, length, r, unique, (int) Math.round (length * nulls));
+    default <T> SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique, double nulls) {
+        return getRandomSequence (levels, LevelsArrange.DISHONEST, length, r, unique, (int) Math.round (length * nulls));
     }
     
-    SequenceWithStatistics <T> getRandomSequence (int levels, int length, Random r, boolean unique, int nulls);
+    <T> SequenceWithStatistics <T> getRandomSequence (int levels, LevelsArrange arrage, int length, Random r, boolean unique, int nulls);
     
 }

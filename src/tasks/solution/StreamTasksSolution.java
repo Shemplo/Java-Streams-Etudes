@@ -143,4 +143,9 @@ public class StreamTasksSolution extends StreamTasksTests {
         System.out.println ("Save me Gods!"); // SYSOUT
     }
     
+    @Override
+    public void testSquareMatrixInput (List <List <Integer>> matrix) {
+        System.out.println ("Matrix: " + matrix); // SYSOUT
+    }
+    
 }

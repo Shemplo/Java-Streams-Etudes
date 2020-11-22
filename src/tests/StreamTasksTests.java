@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import tests.inputs.LevelsArrange;
 import tests.presets.HexStrNumbers;
 import tests.presets.IntNumbers;
 import tests.presets.IntStrNumbers;
@@ -235,6 +236,13 @@ public abstract class StreamTasksTests {
     public abstract void testMapInput (
         @TestInputCollection (presets = {NamesAges.class}, constant = {10, 12}, variation = 5, nulls = {5, 1})
         Map <String, Integer> name2age
+    );
+    
+    @Test (order = 100)
+    public abstract void testSquareMatrixInput (
+        @TestInputCollection (presets = {IntNumbers.class}, levels = 2, 
+            arrengement = LevelsArrange.CUBE, constant = {16, 36})
+        List <List <Integer>> matrix
     );
     
 }

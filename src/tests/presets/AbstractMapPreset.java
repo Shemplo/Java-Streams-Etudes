@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.ToDoubleBiFunction;
 
+import tests.inputs.LevelsArrange;
 import tests.inputs.SequenceWithStatistics;
 
 public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
@@ -43,10 +44,13 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
     }
     
     @Override
-    public SequenceWithStatistics <Map <K, V>> getRandomSequence (int levels, int length, Random r, boolean unique, int nulls) {
+    @SuppressWarnings ("unchecked")
+    public <T> SequenceWithStatistics <T> getRandomSequence (
+        int levels, LevelsArrange arrange, int length, Random r, boolean unique, int nulls
+    ) {
         if (length + nulls > map.size ()) {
             throw new IllegalArgumentException (String.format (
-                "Requested number of map (%d) is more than actual size of preset (%d)",
+                "Requested size of map (%d) is more than actual size of preset (%d)",
                 length + nulls, map.size ()
             ));
         }
@@ -78,9 +82,9 @@ public abstract class AbstractMapPreset <K, V> implements DataMapPreset <K, V> {
             double avg = statistics.getAverage (), min = statistics.getMin (), max = statistics.getMax ();
             double med = statisticsData.stream ().mapToDouble (i -> i).sorted ().skip (length / 2).findFirst ().orElse (0.0);
             
-            return new SequenceWithStatistics <> (sequence, length, min, max, avg, med);
+            return new SequenceWithStatistics <> ((T) sequence, length, min, max, avg, med);
         } else {
-            return new SequenceWithStatistics <> (sequence);
+            return new SequenceWithStatistics <> ((T) sequence);
         }
     }
     
