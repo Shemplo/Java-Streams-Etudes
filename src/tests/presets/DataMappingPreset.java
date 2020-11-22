@@ -2,14 +2,14 @@ package tests.presets;
 
 import java.util.Random;
 
-public interface DataMappingPreset <T, S> extends DataPreset <T> {
+public interface DataMappingPreset extends DataPreset {
     
-    Class <? extends DataPreset <S>> getSourcePreset ();
+    Class <? extends DataPreset> getSourcePreset ();
     
-    void initialize (Random r, DataPreset <S> preset);
+    DataMappingPreset initialize (Random r, DataPreset preset);
     
     @Override
-    default void initialize (Random r) {
+    default DataMappingPreset initialize (Random r) {
         throw new UnsupportedOperationException ();
     }
     

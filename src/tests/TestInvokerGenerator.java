@@ -1,8 +1,11 @@
 package tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,18 +44,26 @@ public class TestInvokerGenerator {
         return (implementation, reference) -> {
             final var seed = random.nextLong ();
             
+            final var customBuffer = new ByteArrayOutputStream ();
+            System.setOut (new PrintStream (customBuffer, true, StandardCharsets.UTF_8));
+            
             final var resultImpl = prepareSingleInvoker (
                 method, paramInput, new Random (seed), result, pool, prepared, true
             ).apply (implementation, reference);
+            
+            final var output = new String (customBuffer.toByteArray (), StandardCharsets.UTF_8);
+            resultImpl.addOutput (output);
             
             final var resultRef = prepareSingleInvoker (
                 method, paramInput, new Random (seed), result, pool, prepared, false
             ).apply (implementation, reference);
             
-            final var wrappedRef = wrapResult (result.wrap (), resultRef.result);
-            if (method.getReturnType () != Void.class && method.getReturnType () != void.class
-                    && (resultImpl.result != null && wrappedRef != null)) {
-                compareAnswers (resultImpl.result, wrappedRef, result.parallel ());
+            if (result != null) {                
+                final var wrappedRef = wrapResult (result.wrap (), resultRef.result);
+                if (method.getReturnType () != Void.class && method.getReturnType () != void.class
+                        && (resultImpl.result != null && wrappedRef != null)) {
+                    compareAnswers (resultImpl.result, wrappedRef, result.parallel ());
+                }
             }
             
             final var consumersImpt = resultImpl.getConsumers ();
@@ -79,7 +90,7 @@ public class TestInvokerGenerator {
             final var instance = forImplementation ? implementation : reference;
             final var seed = random.nextLong ();
             
-            if (result.checkBy () == -1) {                
+            if (result == null || result.checkBy () == -1) {                
                 return prepareAndInvokeImplementation (instance, method, paramInput, seed);
             } else {
                 final var value = prepareAndInvokeImplementation (instance, method, paramInput, seed);
@@ -127,6 +138,7 @@ public class TestInvokerGenerator {
         int.class, double.class, Integer.class, Double.class
     );
     
+    @SuppressWarnings ("unchecked")
     private InvocationResult prepareAndInvokeImplementation (
         StreamTasksTests implementation, Method method, Object [] paramInput, long randomSeed
     ) {
@@ -140,21 +152,48 @@ public class TestInvokerGenerator {
             
             if (parameters [i].getType () == List.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    input [i] = ((SequenceWithStatistics <?>) paramInput [i]).data;
+                    final var data = ((SequenceWithStatistics <?>) paramInput [i]).data;
+                    if (data instanceof List) {
+                        input [i] = data;
+                    } else if (data instanceof Collection) {
+                        input [i] = List.copyOf ((Collection <?>) data);
+                    } else {
+                        requestCorrectType (method, i, List.class, data.getClass ());
+                    }
                 } else if (paramInput [i] instanceof List) {
                     input [i] = paramInput [i];
+                } else if (paramInput [i] instanceof Collection) {
+                    input [i] = List.copyOf ((Collection <?>) paramInput [i]);
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Set.class) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    input [i] = Set.copyOf (((SequenceWithStatistics <?>) paramInput [i]).data);
+                    final var data = ((SequenceWithStatistics <?>) paramInput [i]).data;
+                    if (data instanceof Set) {
+                        input [i] = data;
+                    } else if (data instanceof Collection) {
+                        input [i] = Set.copyOf ((Collection <?>) data);
+                    } else {
+                        requestCorrectType (method, i, Set.class, data.getClass ());
+                    }
+                } else {
+                    requestAnnotation (method, i, TestInputCollection.class);
+                }
+            } else if (parameters [i].getType () == Map.class) {
+                if (paramInput [i] instanceof SequenceWithStatistics) {
+                    final var data = ((SequenceWithStatistics <?>) paramInput [i]).data;
+                    if (data instanceof Map) {
+                        input [i] = data;
+                    } else {
+                        requestCorrectType (method, i, Map.class, data.getClass ());
+                    }
                 } else {
                     requestAnnotation (method, i, TestInputCollection.class);
                 }
             } else if (parameters [i].getType () == Stream.class || isIntStream) {
                 if (paramInput [i] instanceof SequenceWithStatistics) {
-                    final var sws = (SequenceWithStatistics <?>) paramInput [i];
+                    final var sws = (SequenceWithStatistics <List <?>>) paramInput [i];
                     final var stream = sws.isParallelStream () ? sws.data.parallelStream () : sws.data.stream ();
                     if (isIntStream) {
                         input [i] = stream.mapToInt (num -> (Integer) num);
@@ -168,7 +207,6 @@ public class TestInvokerGenerator {
                 }
             } else if (parameters [i].getType () == Supplier.class) {
                 if (paramInput [i] instanceof Function) {
-                    @SuppressWarnings ("unchecked")
                     final var supplier = (Function <Random, Supplier <?>>) paramInput [i];
                     input [i] = supplier.apply (random);
                 } else {
@@ -248,6 +286,13 @@ public class TestInvokerGenerator {
         throw new IllegalArgumentException (String.format (
             "In method `%s` parameter #%d should be annotated with @%s",
             method.getName (), parameterIndex, annotation.getSimpleName ()
+        ));
+    }
+    
+    private void requestCorrectType (Method method, int parameterIndex, Class <?> expected, Class <?> actual) {
+        throw new IllegalArgumentException (String.format (
+            "In method `%s` parameter #%d has type `%s` and can't be assigned from type `%s`",
+            method.getName (), parameterIndex, expected.getSimpleName (), actual.getSimpleName ()
         ));
     }
     

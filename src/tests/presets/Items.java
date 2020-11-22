@@ -1,20 +1,15 @@
 package tests.presets;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.IntStream;
 
 import tasks.utils.Item;
 
-public class Items implements DataPreset <Item> {
-
-    private final List <Item> items = new ArrayList <> ();
+public class Items extends AbstractListPreset <Item> {
     
     @Override
-    public void initialize (Random r) {
+    public Items initialize (Random r) {
         IntStream.range (0, 1000).mapToObj (__ -> {
             final var item = new Item ();
             
@@ -25,21 +20,12 @@ public class Items implements DataPreset <Item> {
             item.setCategory (randomCategory (r));
             
             return item;
-        }).forEach (items::add);
+        }).forEach (values::add);
+        return this;
     }
     
     public static char randomCategory (Random r) {
         return (char) ('A' + r.nextInt (26));
-    }
-
-    @Override
-    public List <Item> getData () {
-        return Collections.unmodifiableList (items);
-    }
-
-    @Override
-    public boolean doesSupportStatistics () {
-        return true;
     }
 
     @Override

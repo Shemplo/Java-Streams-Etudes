@@ -14,7 +14,7 @@ import tests.presets.DataPreset;
 @Retention (RUNTIME)
 public @interface TestInputSupplier {
     
-    Class <? extends DataPreset <?>> [] presets ();
+    Class <? extends DataPreset> [] presets ();
     
     SupplierMode mode () default SupplierMode.SHUFFLED_SEQUENTIAL;
     

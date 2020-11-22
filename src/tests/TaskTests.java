@@ -41,7 +41,16 @@ public class TaskTests {
     public InvocationResult runTests (StreamTasksTests implementation, StreamTasksTests reference) {
         final var stub = new InvocationResult (null, 0);
         return cases.stream ().map (caze -> caze.apply (implementation, reference))
-             . reduce (stub, (a, b) -> a == stub && b != null ? b : a);
+             . reduce (stub, (a, b) -> {
+                 if (a == stub && b != null) {
+                     return b;
+                 } else if (a != stub && b != null) {
+                     b.addAnotherResult (a);
+                     return b;
+                 } else {
+                     return a;
+                 }
+             });
     }
     
 }
