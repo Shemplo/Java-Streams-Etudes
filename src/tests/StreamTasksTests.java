@@ -229,4 +229,11 @@ public abstract class StreamTasksTests {
         List <Integer> numbers2
     );
     
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <List <Integer>> task26 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.4, 0.5, 1.2, 1.7, 2.0}, variation = 20)
+        List <Integer> numbers
+    );
+    
 }

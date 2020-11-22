@@ -136,4 +136,9 @@ public class StreamTasksSolution extends StreamTasksTests {
              . map (i -> numbers1.get (i) + numbers2.get (i));
     }
     
+    @Override
+    public Stream <List <Integer>> task26 (List <Integer> numbers) {
+        return IntStream.range (0, numbers.size ()).mapToObj (i -> numbers.subList (0, i + 1));
+    }
+    
 }

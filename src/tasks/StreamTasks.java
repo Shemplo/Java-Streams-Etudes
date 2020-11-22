@@ -250,4 +250,13 @@ public class StreamTasks extends StreamTasksTests {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     
+    /**
+     * @return Stream of prefixes with length that equals to the index of prefix + 1
+     * @example [0, 1, 2, 3, 4] -> [[0], [0, 1], [0, 1, 2], [0, 1, 2, 3], [0, 1, 2, 3, 4]]
+     * @lines 1
+     */
+    public Stream <List <Integer>> task26 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
 }
