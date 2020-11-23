@@ -141,4 +141,17 @@ public class StreamTasksSolution extends StreamTasksTests {
         return IntStream.range (0, numbers.size ()).mapToObj (i -> numbers.subList (0, i + 1));
     }
     
+    @Override
+    public <T> Stream <List <T>> task27 (List <T> values, int sl) {
+        final var len = values.size ();
+        return IntStream.range (0, (int) Math.ceil (len * 1.0 / sl)).mapToObj (
+            i -> values.subList (i * sl, Math.min ((i + 1) * sl, len)
+        ));
+    }
+    
+    @Override
+    public IntStream task28 (Function <Integer, Integer> function) {
+        return IntStream.rangeClosed (-1000, 1000).filter (i -> function.apply (i) == 0);
+    }
+    
 }

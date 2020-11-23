@@ -236,4 +236,21 @@ public abstract class StreamTasksTests {
         List <Integer> numbers
     );
     
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract <T> Stream <List <T>> task27 (
+        @TestInputCollection (presets = {IntNumbers.class, IntStrNumbers.class}, 
+            percentage = {0.3, 0.6, 1.1, 1.8, 1.9}, variation = 20)
+        List <T> values,
+        @TestInputConstant (sequence = {0}, parameter = 1, variation = 200)
+        int sizeLimit
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task28 (
+        @TestInputFunction (indices = {5, 6})
+        Function <Integer, Integer> function
+    );
+    
 }

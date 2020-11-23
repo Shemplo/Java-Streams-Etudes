@@ -15,6 +15,10 @@ public @interface TestInputConstant {
     
     int [] sequence () default {};
     
+    /**
+     * 0 - length, 1 - minimum, 2 - max, 3 - average, 4 - median
+     * @return
+     */
     int parameter () default -1;
     
     int variation () default 0;

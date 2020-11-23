@@ -34,7 +34,10 @@ public class TestInputGenerator {
         (String s) -> Integer.parseInt (s),
         (Integer i) -> i + 2,
         (Integer i) -> i * i,
-        (Integer i) -> i * 7
+        (Integer i) -> i * 7,
+        
+        (Integer x) -> x * x * x - 9 * x * x - 64 * x + 336,
+        (Integer x) -> 2 * x * x * x * x + 14 * x * x * x - 416 * x * x - 1376 * x + 10752
     );
     
     private final List <? extends Predicate <?>> predicates = List.of (

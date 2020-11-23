@@ -252,10 +252,31 @@ public class StreamTasks extends StreamTasksTests {
     
     /**
      * @return Stream of prefixes with length that equals to the index of prefix + 1
+     * @see List#subList(int, int)
      * @example [0, 1, 2, 3, 4] -> [[0], [0, 1], [0, 1, 2], [0, 1, 2, 3], [0, 1, 2, 3, 4]]
      * @lines 1
      */
     public Stream <List <Integer>> task26 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of groups of values with length that is not more than given `sizeLimit`
+     * @see List#subList(int, int)
+     * @example [0, 1, 2, 3, 4, 5, 6, 7], 3 -> [[0, 1, 2], [3, 4, 5], [6, 7]]
+     * @lines 4-
+     */
+    public <T> Stream <List <T>> task27 (List <T> values, int sizeLimit) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of integer function roots from segment [-1000, 1000] in ascending order
+     * @see IntStream#filter(IntPredicate)
+     * @example x^2 - 3x - 10 -> [-2, 5]
+     * @lines 1
+     */
+    public IntStream task28 (Function <Integer, Integer> function) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     
