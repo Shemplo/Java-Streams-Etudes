@@ -88,3 +88,15 @@ Version 0.1.0 is available [here](https://github.com/Shemplo/Java-Streams-Etudes
 * The first draft of this project
 * It has different 60 tasks
 
+<hr />
+
+Future plans:
+
+* `[ ]` Rise number of tasks to 100
+  * `[~]` Add more input generators to test engine
+    * `[✓]` For `Map <?, ?>` type 
+    * `[✓]` For `List <List <?>>` type (and any enclosure level)
+    * `[ ]` Else
+  * `[ ]` Add more input variations to test engine (f.e. collection as extension of another parameter that is collection too)
+  * `[~]` Сome up with some new task ideas
+* `[ ]` Split tasks to several classes by topics
