@@ -136,4 +136,43 @@ public class StreamTasksSolution extends StreamTasksTests {
              . map (i -> numbers1.get (i) + numbers2.get (i));
     }
     
+    @Override
+    public Stream <List <Integer>> task26 (List <Integer> numbers) {
+        return IntStream.range (0, numbers.size ()).mapToObj (i -> numbers.subList (0, i + 1));
+    }
+    
+    @Override
+    public <T> Stream <List <T>> task27 (List <T> values, int sl) {
+        final var len = values.size ();
+        return IntStream.range (0, (int) Math.ceil (len * 1.0 / sl)).mapToObj (
+            i -> values.subList (i * sl, Math.min ((i + 1) * sl, len)
+        ));
+    }
+    
+    @Override
+    public IntStream task28 (Function <Integer, Integer> function) {
+        return IntStream.rangeClosed (-1000, 1000).filter (i -> function.apply (i) == 0);
+    }
+    
+    @Override
+    public double task29 (List <Integer> numbers) {
+        return numbers.stream ().mapToInt (i -> i).average ().orElse (0);
+    }
+    
+    @Override
+    public int task30 (List <Integer> numbers) {
+        final var statistics = numbers.stream ().mapToInt (i -> i).summaryStatistics ();
+        return statistics.getMax () - statistics.getMin ();
+    }
+    
+    @Override
+    public <T> Stream <T> task31 (List <List <T>> numbers) {
+        return numbers.stream ().flatMap (List::stream);
+    }
+    
+    @Override
+    public Stream <Integer> task32 (List <List <Integer>> numbers) {
+        return numbers.stream ().map (list -> list.stream ().mapToInt (i -> i).sum ());
+    }
+    
 }

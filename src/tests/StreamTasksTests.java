@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import tests.inputs.LevelsArrange;
 import tests.presets.HexStrNumbers;
 import tests.presets.IntNumbers;
 import tests.presets.IntStrNumbers;
@@ -227,6 +228,63 @@ public abstract class StreamTasksTests {
         @TestInputCollection (presets = {IntNumbers.class}, constant = {5, 10, 15}, 
             percentage = {1.3, 1.4}, variation = 10)
         List <Integer> numbers2
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <List <Integer>> task26 (
+        @TestInputCollection (presets = {IntNumbers.class}, percentage = {0.4, 0.5, 1.2, 1.7, 2.0}, variation = 20)
+        List <Integer> numbers
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract <T> Stream <List <T>> task27 (
+        @TestInputCollection (presets = {IntNumbers.class, IntStrNumbers.class}, 
+            percentage = {0.3, 0.6, 1.1, 1.8, 1.9, 2.4}, variation = 20)
+        List <T> values,
+        @TestInputConstant (sequence = {0}, parameter = 4, variation = 200)
+        int sizeLimit
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract IntStream task28 (
+        @TestInputFunction (indices = {5, 6})
+        Function <Integer, Integer> function
+    );
+    
+    @Test (order = 2)
+    @TestResult (repeat = 1)
+    public abstract double task29 (
+        @TestInputCollection (presets = {IntNumbers.class}, constant = {0, 0, 0, 0}, 
+            percentage = {0.1, 0.5, 0.8, 1.4, 1.7}, variation = 10)
+        List <Integer> numbers
+    );
+    
+    @Test (order = 3)
+    @TestResult (repeat = 1)
+    public abstract int task30 (
+        @TestInputCollection (presets = {IntNumbers.class}, constant = {0, 0, 0, 0}, 
+            percentage = {0.1, 0.5, 0.8, 1.4, 1.7}, variation = 10)
+        List <Integer> numbers
+    );
+    
+    @Test (order = 3)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract <T> Stream <T> task31 (
+        @TestInputCollection (presets = {IntNumbers.class, HexStrNumbers.class, Names.class},
+            levels = 2, arrengement = LevelsArrange.DISHONEST, percentage = {0.1, 0.2, 0.3, 1.1, 1.2}, 
+            variation = 20)
+        List <List <T>> numbers
+    );
+    
+    @Test (order = 3)
+    @TestResult (repeat = 1, wrap = List.class)
+    public abstract Stream <Integer> task32 (
+        @TestInputCollection (presets = {IntNumbers.class}, levels = 2, arrengement = LevelsArrange.DISHONEST, 
+            percentage = {0.1, 0.2, 0.3, 1.1, 1.2}, variation = 20)
+        List <List <Integer>> numbers
     );
     
 }

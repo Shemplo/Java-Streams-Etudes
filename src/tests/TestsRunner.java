@@ -1,7 +1,10 @@
 package tests;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import tasks.StreamTasksMain;
 
 public class TestsRunner {
     
@@ -30,12 +33,15 @@ public class TestsRunner {
             System.out.printf ("Test %3d -- ", i + 1);
             
             final var start = System.currentTimeMillis ();
+            List <String> customOutput = List.of ();
             long internalRuntime = Long.MAX_VALUE;
             Throwable throwable = null;
             TestVerdict verdict = null;
             
             try {
-                internalRuntime = testsPool.runTest (i, implementation, reference).getRuntime ();
+                final var result = testsPool.runTest (i, implementation, reference);
+                internalRuntime = result.getRuntime ();
+                customOutput = result.getOutput ();
                 verdict = TestVerdict.ACCEPTED;
             } catch (UnsupportedOperationException uoe) {
                 verdict = TestVerdict.NOT_IMPL;
@@ -49,6 +55,7 @@ public class TestsRunner {
                 verdict = TestVerdict.RE;
                 throwable = t.getMessage () != null ? t : null;
             } finally {
+                System.setOut (StreamTasksMain.ORIGINAL_OUT);
                 final var end = System.currentTimeMillis ();
                 
                 final var runtime = Math.min (end - start, internalRuntime);
@@ -56,6 +63,15 @@ public class TestsRunner {
                 Optional.ofNullable (throwable).ifPresent (t -> {
                     System.out.printf ("  %s%n", t.getMessage ());
                 });
+                
+                for (int j = 0; customOutput != null && j < customOutput.size (); j++) {
+                    final var output = customOutput.get (j);
+                    
+                    if (output != null && !output.isBlank ()) {
+                        System.out.printf ("  -- Your output (case %2d) --%n", j + 1);
+                        System.out.println (customOutput.get (j));                        
+                    }
+                }
                 
                 failed += verdict == TestVerdict.ACCEPTED ? 0 : 1;
             }

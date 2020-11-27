@@ -1,4 +1,5 @@
 package tasks;
+import java.io.PrintStream;
 import java.util.Locale;
 
 import tasks.solution.StreamTasksSolution;
@@ -10,6 +11,8 @@ public class StreamTasksMain {
     /*******************************/
     /* DO NOT TOUCH METHODS BELLOW */
     /*******************************/
+    
+    public static PrintStream ORIGINAL_OUT = System.out;
     
     public static void main (String ... args) {
         Locale.setDefault (Locale.ENGLISH);

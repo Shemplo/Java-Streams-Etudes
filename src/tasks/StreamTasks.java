@@ -1,5 +1,6 @@
 package tasks;
 import java.util.Collection;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -247,6 +248,78 @@ public class StreamTasks extends StreamTasksTests {
      * @lines 1
      */
     public IntStream task25 (List <Integer> numbers1, List <Integer> numbers2) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of prefixes with length that equals to the index of prefix + 1
+     * @see List#subList(int, int)
+     * @example [0, 1, 2, 3, 4] -> [[0], [0, 1], [0, 1, 2], [0, 1, 2, 3], [0, 1, 2, 3, 4]]
+     * @lines 1
+     */
+    public Stream <List <Integer>> task26 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of groups of values with length that is not more than given `sizeLimit`
+     * @see List#subList(int, int)
+     * @example [0, 1, 2, 3, 4, 5, 6, 7], 3 -> [[0, 1, 2], [3, 4, 5], [6, 7]]
+     * @lines 4-
+     */
+    public <T> Stream <List <T>> task27 (List <T> values, int sizeLimit) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of integer function roots from segment [-1000, 1000] in ascending order
+     * @see IntStream#filter(IntPredicate)
+     * @example x^2 - 3x - 10 -> [-2, 5]
+     * @lines 1
+     */
+    public IntStream task28 (Function <Integer, Integer> function) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Average value of given numbers (or -1 if stream is empty)
+     * @see Stream#mapToInt(ToIntFunction)
+     * @see IntStream#average()
+     * @lines 1
+     */
+    public double task29 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Values variation (the difference between maximal and minimal values)
+     * @see IntStream#summaryStatistics()
+     * @see IntSummaryStatistics
+     * @lines 2-
+     */
+    public int task30 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    // MULTI-DIMENTION //
+    
+    /**
+     * @return Stream of all values from given 2-dim list
+     * @see Stream#flatMap(Function)
+     * @see List#stream()
+     * @example [[1, 2], [4, 5, 3], [], [7]] -> [1, 2, 4, 5, 3, 7]
+     * @lines 1
+     */
+    public <T> Stream <T> task31 (List <List <T>> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of sums of values in internal lists
+     * @example [[1, 2], [4, 5, 3], [], [7]] -> [3, 12, 0, 7]
+     * @lines 1
+     */
+    public Stream <Integer> task32 (List <List <Integer>> numbers) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     
