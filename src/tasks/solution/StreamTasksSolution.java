@@ -154,4 +154,25 @@ public class StreamTasksSolution extends StreamTasksTests {
         return IntStream.rangeClosed (-1000, 1000).filter (i -> function.apply (i) == 0);
     }
     
+    @Override
+    public double task29 (List <Integer> numbers) {
+        return numbers.stream ().mapToInt (i -> i).average ().orElse (0);
+    }
+    
+    @Override
+    public int task30 (List <Integer> numbers) {
+        final var statistics = numbers.stream ().mapToInt (i -> i).summaryStatistics ();
+        return statistics.getMax () - statistics.getMin ();
+    }
+    
+    @Override
+    public <T> Stream <T> task31 (List <List <T>> numbers) {
+        return numbers.stream ().flatMap (List::stream);
+    }
+    
+    @Override
+    public Stream <Integer> task32 (List <List <Integer>> numbers) {
+        return numbers.stream ().map (list -> list.stream ().mapToInt (i -> i).sum ());
+    }
+    
 }

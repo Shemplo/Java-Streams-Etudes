@@ -67,6 +67,13 @@ public class OutputAssertions {
         );
     }
     
+    public static void assertOutput (Double actual, Double expected) {
+        assert Objects.equals (actual, expected) : String.format (
+            "Double value `%d` was expected (actual given: %d)", 
+            expected, actual
+        );
+    }
+    
     public static <T> void assertOutput (Stream <T> actual, boolean parallel, List <T> expected) {
         assert actual.isParallel () == parallel : String.format (
             "Stream should%s be parallel", parallel ? "" : " not"

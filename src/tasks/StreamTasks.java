@@ -1,5 +1,6 @@
 package tasks;
 import java.util.Collection;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -277,6 +278,48 @@ public class StreamTasks extends StreamTasksTests {
      * @lines 1
      */
     public IntStream task28 (Function <Integer, Integer> function) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Average value of given numbers (or -1 if stream is empty)
+     * @see Stream#mapToInt(ToIntFunction)
+     * @see IntStream#average()
+     * @lines 1
+     */
+    public double task29 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Values variation (the difference between maximal and minimal values)
+     * @see IntStream#summaryStatistics()
+     * @see IntSummaryStatistics
+     * @lines 2-
+     */
+    public int task30 (List <Integer> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    // MULTI-DIMENTION //
+    
+    /**
+     * @return Stream of all values from given 2-dim list
+     * @see Stream#flatMap(Function)
+     * @see List#stream()
+     * @example [[1, 2], [4, 5, 3], [], [7]] -> [1, 2, 4, 5, 3, 7]
+     * @lines 1
+     */
+    public <T> Stream <T> task31 (List <List <T>> numbers) {
+        throw new UnsupportedOperationException ("Implement method instead of this line");
+    }
+    
+    /**
+     * @return Stream of sums of values in internal lists
+     * @example [[1, 2], [4, 5, 3], [], [7]] -> [3, 12, 0, 7]
+     * @lines 1
+     */
+    public Stream <Integer> task32 (List <List <Integer>> numbers) {
         throw new UnsupportedOperationException ("Implement method instead of this line");
     }
     

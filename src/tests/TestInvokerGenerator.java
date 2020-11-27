@@ -300,12 +300,14 @@ public class TestInvokerGenerator {
         final var iType = implementation instanceof IntStream ? IntStream.class
                         : implementation instanceof Stream ? Stream.class
                         : implementation instanceof Integer ? Integer.class
+                        : implementation instanceof Double ? Double.class
                         : implementation instanceof List ? List.class
                         : implementation instanceof Map ? Map.class 
                         : implementation instanceof Set ? Set.class : null;
         final var rType = reference instanceof IntStream ? IntStream.class
                         : reference instanceof Stream ? Stream.class
                         : reference instanceof Integer ? Integer.class
+                        : reference instanceof Double ? Double.class
                         : reference instanceof List ? List.class
                         : reference instanceof Map ? Map.class
                         : reference instanceof Set ? Set.class : null;
